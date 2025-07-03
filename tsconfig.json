@@ -5,6 +5,7 @@
     "moduleDetection": "force",
     "module": "ESNext",
     "moduleResolution": "Bundler",
+    "outDir": "dist",
     "allowImportingTsExtensions": false,
     "resolveJsonModule": true,
     "allowJs": false,
@@ -19,13 +20,10 @@
     "strictNullChecks": true,
     "noUncheckedIndexedAccess": true,
     "skipLibCheck": true,
-    "incremental": true,
+    // "incremental": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "experimentalDecorators": true,
-    "paths": {
-      "@/*": ["./src/*"]
-    }
+    "experimentalDecorators": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]

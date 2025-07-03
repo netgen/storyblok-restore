@@ -1,6 +1,6 @@
-import type { BulkRestoreService } from "@/bulk/services/BulkRestore";
-import { createAssetFolderBulkRestoreService } from "@/resources/assetFolder/createAssetFolderBulkRestoreService";
-import { createStoryBulkRestoreService } from "@/resources/story/createStoryBulkRestoreService";
+import type { BulkRestoreService } from "../services/BulkRestore";
+import { createAssetFolderBulkRestoreService } from "../../resources/assetFolder/createAssetFolderBulkRestoreService";
+import { createStoryBulkRestoreService } from "../../resources/story/createStoryBulkRestoreService";
 
 export class BulkRestoreServiceFactory {
   constructor(

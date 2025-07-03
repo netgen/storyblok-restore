@@ -1,4 +1,4 @@
-import { StoryRestoreService } from "@/resources/story/StoryRestoreService";
+import { StoryRestoreService } from "../../resources/story/StoryRestoreService.js";
 import type { ResourceRestoreService } from "../services/ResourceRestoreService";
 
 /**

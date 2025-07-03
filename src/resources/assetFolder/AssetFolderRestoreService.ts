@@ -1,6 +1,6 @@
-import type { RestoreOptions } from "@/shared/types";
-import { BaseResourceRestoreService } from "@/single/services/BaseRestoreService";
-import type { StoryblokResource } from "@/single/StoryblokResource";
+import type { RestoreOptions } from "../../shared/types";
+import { BaseResourceRestoreService } from "../../single/services/BaseRestoreService";
+import type { StoryblokResource } from "../../single/StoryblokResource";
 import type { ISbResponse } from "storyblok-js-client";
 
 /**
