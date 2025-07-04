@@ -1,3 +1,8 @@
+import { AccessTokenRestoreService } from "../../resources/accessTokens/AccessTokenRestoreService.js";
+import { AssetFolderRestoreService } from "../../resources/assetFolder/AssetFolderRestoreService.js";
+import { CollaboratorRestoreService } from "../../resources/collaborators/CollaboratorRestoreService.js";
+import { ComponentRestoreService } from "../../resources/component/ComponentRestoreService.js";
+import { ComponentGroupRestoreService } from "../../resources/componentGroup/ComponentGroupRestoreService.js";
 import { StoryRestoreService } from "../../resources/story/StoryRestoreService.js";
 import type { ResourceRestoreService } from "../services/ResourceRestoreService";
 
@@ -25,4 +30,9 @@ export class ResourceRestoreServiceFactory {
 
 export const resourceRestoreServiceFactory = new ResourceRestoreServiceFactory([
   new StoryRestoreService(),
+  new AccessTokenRestoreService(),
+  new AssetFolderRestoreService(),
+  new CollaboratorRestoreService(),
+  new ComponentGroupRestoreService(),
+  new ComponentRestoreService(),
 ]);

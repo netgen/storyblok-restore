@@ -37,15 +37,17 @@ export class BulkRestoreService<T extends StoryblokResource> {
   async restore(
     resources: T[],
     options: BulkRestoreOptions,
-    context: BulkRestoreContext
+    context: BulkRestoreContext,
+    allContexts?: Map<string, BulkRestoreContext>
   ) {
-    console.log("Restoring resources", resources.length);
+    console.log("Restoring resources", resources.length, allContexts);
     const sorted = this.sortingStrategy?.sort(resources) || resources;
 
     for (const resource of sorted) {
       console.log("Restoring resource", resource.id);
       const processed =
-        this.preprocessor?.preprocess(resource, context) || resource;
+        this.preprocessor?.preprocess(resource, context, allContexts) ||
+        resource;
       const importedResource = await this.restoreService.restore(
         processed,
         options,

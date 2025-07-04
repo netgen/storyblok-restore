@@ -1,11 +1,11 @@
 #!/usr/bin/env node
-import fs from "fs";
-import path from "path";
 import StoryblokClient from "storyblok-js-client";
 import { bulkRestoreServiceFactory } from "../../bulk/factory/BulkRestoreServiceFactory";
+import { SpaceRestoreService } from "../services/SpaceRestoreService";
 
 export async function runSpaceRestore(args: Record<string, any>) {
-  if (!args["backup-folder"] || !args.token || !args.space) {
+  console.log("runSpaceRestore", args);
+  if (!args["backupFolder"] || !args.token || !args.space) {
     console.error(
       "Usage: space-restore --backup-folder <folder> --token <token> --space <space_id> [options]"
     );
@@ -16,44 +16,28 @@ export async function runSpaceRestore(args: Record<string, any>) {
   const spaceId = args.space || process.env.STORYBLOK_SPACE_ID;
   const region = args.region || "eu";
 
-  const backupRoot = args["backup-folder"];
-  const context = {
-    apiClient: new StoryblokClient({ oauthToken, region }),
-    oldIdToNewIdMap: new Map(),
-    oldUuidToNewUuidMap: new Map(),
-    spaceId,
-  };
+  const backupRoot = args["backupFolder"];
+
+  const apiClient = new StoryblokClient({ oauthToken, region });
   const options = {
     publish: !!args.publish,
     create: !!args.create,
     forceUpdate: !!args.forceUpdate,
-    spaceId: args.space,
+    spaceId: spaceId,
   };
 
   const RESOURCE_ORDER = [
-    { type: "asset-folders", folder: "asset-folders" },
-    { type: "stories", folder: "stories" },
+    "asset-folders",
+    "stories",
+    "component-groups",
+    "components",
   ];
 
-  for (const { type, folder } of RESOURCE_ORDER) {
-    const folderPath = path.join(backupRoot, folder);
-    if (!fs.existsSync(folderPath)) {
-      console.log(`Skipping ${type}: folder not found`);
-      continue;
-    }
-    const files = fs.readdirSync(folderPath).filter((f) => f.endsWith(".json"));
-    if (files.length === 0) {
-      console.log(`Skipping ${type}: no JSON files found`);
-      continue;
-    }
-    const resources = files.map((f) =>
-      JSON.parse(fs.readFileSync(path.join(folderPath, f), "utf8"))
-    );
-    const bulkRestoreService =
-      bulkRestoreServiceFactory.getServiceForType(type);
-    console.log(`Restoring ${resources.length} ${type}...`);
-    await bulkRestoreService.restore(resources, options, context);
-    console.log(`Finished restoring ${type}`);
-  }
+  const spaceRestoreService = new SpaceRestoreService(
+    bulkRestoreServiceFactory,
+    RESOURCE_ORDER
+  );
+  await spaceRestoreService.restore(backupRoot, options, apiClient);
+
   console.log("Space restore complete!");
 }
