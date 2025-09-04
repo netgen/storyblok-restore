@@ -8,8 +8,9 @@
  * @property parent_id - Optional parent resource ID (for nestable resources).
  */
 export interface StoryblokResource {
-	id: number
-	uuid: string
-	publish?: 0 | 1
-	parent_id?: number | null
+  id: number;
+  uuid: string;
+  publish?: 0 | 1;
+  parent_id?: number | null;
+  parent_uuid?: string | null;
 }

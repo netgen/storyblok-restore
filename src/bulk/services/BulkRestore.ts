@@ -43,24 +43,46 @@ export class BulkRestoreService<T extends StoryblokResource> {
     console.log("Restoring resources", resources.length, allContexts);
     const sorted = this.sortingStrategy?.sort(resources) || resources;
 
+    const failedRestoredResources: [T, unknown][] = [];
+    let successfullyRestoredResources = 0;
+
     for (const resource of sorted) {
-      console.log("Restoring resource", resource.id);
-      const processed =
-        this.preprocessor?.preprocess(resource, context, allContexts) ||
-        resource;
-      const importedResource = await this.restoreService.restore(
-        processed,
-        options,
-        context
-      );
+      try {
+        console.log("Restoring resource", resource.id);
+        const processed =
+          this.preprocessor?.preprocess(resource, context, allContexts) ||
+          resource;
 
-      console.log("Imported resource", importedResource);
+        const importedResource = await this.restoreService.restore(
+          processed,
+          options,
+          context
+        );
 
-      context.oldIdToNewIdMap.set(resource.id, importedResource.id);
-      context.oldUuidToNewUuidMap.set(resource.uuid, importedResource.uuid);
+        console.log("Imported resource", importedResource);
+
+        context.oldIdToNewIdMap.set(resource.id, importedResource.id);
+        context.oldUuidToNewUuidMap.set(resource.uuid, importedResource.uuid);
+        successfullyRestoredResources++;
+        console.log(
+          `Successfully restored ${successfullyRestoredResources}/${sorted.length} resources`
+        );
+      } catch (error) {
+        console.error("Error restoring resource", resource.id, error);
+        failedRestoredResources.push([resource, error]);
+      }
     }
 
     await this.postProcessor?.postProcess(sorted, options, context);
+
+    if (failedRestoredResources.length > 0) {
+      console.error(
+        `Failed to restore ${failedRestoredResources.length}/${sorted.length} resources:`
+      );
+      for (const [resource, error] of failedRestoredResources) {
+        console.error("Failed to restore resource", resource, error);
+      }
+    }
   }
 
   /**

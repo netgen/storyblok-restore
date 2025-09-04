@@ -28,16 +28,23 @@ export async function runSpaceRestore(args: Record<string, any>) {
 
   const RESOURCE_ORDER = [
     "asset-folders",
-    "stories",
-    "component-groups",
-    "components",
+    // "component-groups",
+    // "components",
+    // "stories",
+    // "datasources",
+    // "datasource-entries",
   ];
 
   const spaceRestoreService = new SpaceRestoreService(
     bulkRestoreServiceFactory,
     RESOURCE_ORDER
   );
-  await spaceRestoreService.restore(backupRoot, options, apiClient);
+  try {
+    await spaceRestoreService.restore(backupRoot, options, apiClient);
+  } catch (error) {
+    console.error("Space restore failed:", error);
+    process.exit(1);
+  }
 
   console.log("Space restore complete!");
 }
