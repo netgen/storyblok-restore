@@ -3,6 +3,8 @@ import { AssetFolderRestoreService } from "../../resources/assetFolder/AssetFold
 import { CollaboratorRestoreService } from "../../resources/collaborators/CollaboratorRestoreService.js";
 import { ComponentRestoreService } from "../../resources/component/ComponentRestoreService.js";
 import { ComponentGroupRestoreService } from "../../resources/componentGroup/ComponentGroupRestoreService.js";
+import { DatasourceRestoreService } from "../../resources/datasource/DatasourceRestoreService.js";
+import { DatasourceEntryRestoreService } from "../../resources/datasourceEntry/DatasourceEntryRestoreService.js";
 import { StoryRestoreService } from "../../resources/story/StoryRestoreService.js";
 import type { ResourceRestoreService } from "../services/ResourceRestoreService";
 
@@ -35,4 +37,6 @@ export const resourceRestoreServiceFactory = new ResourceRestoreServiceFactory([
   new CollaboratorRestoreService(),
   new ComponentGroupRestoreService(),
   new ComponentRestoreService(),
+  new DatasourceRestoreService(),
+  new DatasourceEntryRestoreService(),
 ]);

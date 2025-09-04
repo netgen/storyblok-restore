@@ -5,6 +5,8 @@ import { createAccessTokenBulkRestoreService } from "../../resources/accessToken
 import { createCollaboratorBulkRestoreService } from "../../resources/collaborators/createCollaboratorBulkRestoreService";
 import { createComponentGroupBulkRestoreService } from "../../resources/componentGroup/createComponentGroupBulkRestoreService";
 import { createComponentBulkRestoreService } from "../../resources/component/createComponentBulkRestoreService";
+import { createDatasourceBulkRestoreService } from "../../resources/datasource/createDatasourceBulkRestoreService";
+import { createDatasourceEntryBulkRestoreService } from "../../resources/datasourceEntry/createDatasourceEntryBulkRestoreService";
 
 export class BulkRestoreServiceFactory {
   constructor(
@@ -29,4 +31,9 @@ export const bulkRestoreServiceFactory = new BulkRestoreServiceFactory([
   { type: "collaborators", create: createCollaboratorBulkRestoreService },
   { type: "component-groups", create: createComponentGroupBulkRestoreService },
   { type: "components", create: createComponentBulkRestoreService },
+  { type: "datasources", create: createDatasourceBulkRestoreService },
+  {
+    type: "datasource-entries",
+    create: createDatasourceEntryBulkRestoreService,
+  },
 ]);
