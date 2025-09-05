@@ -7,10 +7,10 @@ datasource-entries
 component-groups
 components
 asset-folders
+webhooks
+access-tokens
 
 ## TODO
-access-tokens
-webhooks
 assets
 
 ## OPTIONAL

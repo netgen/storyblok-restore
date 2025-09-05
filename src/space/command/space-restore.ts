@@ -28,13 +28,14 @@ export async function runSpaceRestore(args: Record<string, any>) {
 
   const RESOURCE_ORDER = [
     "webhooks",
-    // "asset-folders",
-    // "assets",
-    // "component-groups",
-    // "components",
-    // "stories",
-    // "datasources",
-    // "datasource-entries",
+    "access-tokens",
+    "component-groups",
+    "components",
+    "datasources",
+    "datasource-entries",
+    "asset-folders",
+    // "assets", NOT IMPLEMENTED
+    "stories",
   ];
 
   const spaceRestoreService = new SpaceRestoreService(

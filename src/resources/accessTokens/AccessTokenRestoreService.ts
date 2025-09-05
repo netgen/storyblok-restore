@@ -27,6 +27,6 @@ export class AccessTokenRestoreService extends BaseResourceRestoreService<Storyb
   }
 
   getResponseData(response: ISbResponse): StoryblokResource {
-    return response.data.api_key;
+    return response.data;
   }
 }

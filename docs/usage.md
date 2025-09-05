@@ -3,6 +3,9 @@
 ## Introduction
 Storyblok Restore is a CLI and library for restoring content to your Storyblok CMS space from backup files. It supports both single-resource and bulk-resource restore workflows, making it easy to recover or migrate your content. (Backup functionality is coming soon.)
 
+Notes:
+- Webhooks cannot be restored with their `secret`, so you will have to manually add the secret back through the interface
+
 ---
 
 ## Installation & Setup
