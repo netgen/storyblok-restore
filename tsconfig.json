@@ -23,7 +23,13 @@
     // "incremental": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "baseUrl": ".",
+    "paths": {
+      "@core/*": ["src/core/*"],
+      "@shared/*": ["src/shared/*"],
+      "@resources/*": ["src/resources/*"]
+    }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]

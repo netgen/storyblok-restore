@@ -1,6 +1,6 @@
-import type { RestoreOptions } from "../../shared/types";
-import { BaseResourceRestoreService } from "../../single/services/BaseRestoreService";
-import type { StoryblokResource } from "../../single/StoryblokResource";
+import type { RestoreOptions } from "@core/types/types";
+import { BaseResourceRestoreService } from "@core/services/BaseRestoreService";
+import type { StoryblokResource } from "@core/types/types";
 import type { ISbResponse } from "storyblok-js-client";
 
 interface WebhookResource extends StoryblokResource {
@@ -18,10 +18,6 @@ export class WebhookRestoreService extends BaseResourceRestoreService<WebhookRes
 
   getCreateUrl(_resource: WebhookResource, options: RestoreOptions): string {
     return `spaces/${options.spaceId}/webhook_endpoints`;
-  }
-
-  getUpdateUrl(resource: WebhookResource, options: RestoreOptions): string {
-    return `spaces/${options.spaceId}/webhook_endpoints/${resource.id}`;
   }
 
   getParams(resource: WebhookResource) {

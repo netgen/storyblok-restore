@@ -9,12 +9,14 @@ components
 asset-folders
 webhooks
 access-tokens
-
-## TODO
+collaborators
 assets
 
+
+## TODO
+space update
+
 ## OPTIONAL
-collaborators
 activities
 
 ## NO

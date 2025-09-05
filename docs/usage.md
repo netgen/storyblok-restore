@@ -1,7 +1,7 @@
 # Storyblok Restore – Usage Guide
 
 ## Introduction
-Storyblok Restore is a CLI and library for restoring content to your Storyblok CMS space from backup files. It supports both single-resource and bulk-resource restore workflows, making it easy to recover or migrate your content. (Backup functionality is coming soon.)
+Storyblok Restore is a CLI tool for restoring entire Storyblok CMS spaces from backup files. It handles the complete restoration process including dependencies, ID/UUID mapping, and reference fixing across all resource types.
 
 Notes:
 - Webhooks cannot be restored with their `secret`, so you will have to manually add the secret back through the interface
@@ -36,76 +36,82 @@ You can provide your Storyblok credentials via CLI flags or environment variable
 
 ---
 
-## Single Restore CLI
-Restore a single resource (e.g., a story) from a JSON file.
+## Space Restore CLI
+Restore an entire Storyblok space from a backup folder containing all resource types.
 
 ### Usage
 ```sh
-single-restore --type <type> --file <file> --token <token> --space <space_id> [options]
+storyblok-restore space-restore --backup-path <path> --token <token> --space <space_id> [options]
 ```
 
 ### Options
-- `--type`      Resource type (e.g., `story`, `asset-folder`)
-- `--file`      Path to the resource JSON file
-- `--token`     Storyblok OAuth token (or use env var)
-- `--space`     Storyblok space ID (or use env var)
-- `--publish`   Publish the resource after restore
-- `--create`    Create a new resource (instead of update)
-- `--propagate` Update references to new UUIDs (if applicable)
-- `--verbose`   Enable verbose logging
+- `--backup-path`    Path to the backup root folder
+- `--token`          Storyblok OAuth token (or use env var)
+- `--space`          Storyblok space ID (or use env var)
+- `--resource-types` Resource types to restore (comma separated, optional)
+- `--verbose`        Enable verbose logging
 
 ### Example
 ```sh
-single-restore --type story --file ./my-story.json --token $STORYBLOK_OAUTH_TOKEN --space $STORYBLOK_SPACE_ID --publish --create
+storyblok-restore space-restore --backup-path ./backup --token $STORYBLOK_OAUTH_TOKEN --space $STORYBLOK_SPACE_ID
 ```
+
+### Restore Specific Resource Types
+You can restore only specific resource types by specifying them:
+
+```sh
+storyblok-restore space-restore --backup-path ./backup --token $STORYBLOK_OAUTH_TOKEN --space $STORYBLOK_SPACE_ID --resource-types "stories,assets,components"
+```
+
+### Supported Resource Types
+- `webhooks`
+- `access-tokens`
+- `component-groups`
+- `components`
+- `datasources`
+- `datasource-entries`
+- `asset-folders`
+- `assets`
+- `stories`
+
+### How Space Restore Works
+- Reads the backup folder structure
+- Restores resources in dependency order (e.g., components before stories)
+- Handles cross-resource references and ID/UUID mapping
+- Processes each resource type with appropriate preprocessing and postprocessing
+- Maintains relationships between resources (e.g., story components, asset folders)
 
 ---
 
-## Bulk Restore CLI
-Restore multiple resources from a folder of JSON files. Handles dependencies (e.g., parent/child), ID/UUID mapping, and reference fixing.
+## Backup Folder Structure
 
-### Usage
-```sh
-bulk-restore --type <type> --folder <folder> --token <token> --space <space_id> [options]
+The tool expects a backup folder with the following structure:
+
+```
+backup/
+├── webhooks/
+│   └── *.json
+├── access-tokens/
+│   └── *.json
+├── component-groups/
+│   └── *.json
+├── components/
+│   └── *.json
+├── datasources/
+│   └── *.json
+├── datasource-entries/
+│   └── *.json
+├── asset-folders/
+│   └── *.json
+├── assets/
+│   └── *.json
+├── asset-files/
+│   └── *.*
+└── stories/
+    └── *.json
 ```
 
-### Options
-- `--type`      Resource type (e.g., `story`, `asset-folder`)
-- `--folder`    Path to the folder containing resource JSON files
-- `--token`     Storyblok OAuth token (or use env var)
-- `--space`     Storyblok space ID (or use env var)
-- `--publish`   Publish resources after restore
-- `--create`    Create new resources (instead of update)
-- `--propagate` Update references to new UUIDs (if applicable)
-- `--verbose`   Enable verbose logging
-
-### Example
-```sh
-bulk-restore --type story --folder ./stories --token $STORYBLOK_OAUTH_TOKEN --space $STORYBLOK_SPACE_ID --publish --create
-```
-
-### How Bulk Restore Works
-- Reads all JSON files in the specified folder.
-- Sorts resources to respect dependencies (e.g., parents before children).
-- Updates parent IDs and references as needed.
-- Restores each resource using the correct API call.
-- Optionally fixes references (e.g., UUIDs) after all resources are created.
-
----
-
-## Configuration
-
-### Environment Variables
-- `STORYBLOK_OAUTH_TOKEN` – Your Storyblok OAuth token
-- `STORYBLOK_SPACE_ID` – Your Storyblok space ID
-- `STORYBLOK_REGION` – (Optional) Your Storyblok region (default: 'eu')
-
-You can also provide these as CLI flags.
-
-### File/Folder Structure
-- **Single restore:** expects a single JSON file representing the resource.
-- **Bulk restore:** expects a folder containing one JSON file per resource (e.g., all stories in `./stories/`).
-- Each JSON file should match the format exported by Storyblok's API or backup tools.
+Each resource type folder should contain JSON files representing individual resources. Asset files (images, documents, etc.) should be in the `asset-files/` folder.
 
 ---
 
@@ -115,14 +121,14 @@ You can also provide these as CLI flags.
 - **Authentication errors:**
   - Ensure your OAuth token and space ID are correct and have sufficient permissions.
   - Try passing them as CLI flags if env vars are not picked up.
-- **Invalid file/folder structure:**
-  - Make sure your JSON files are valid and match the expected format.
-  - For bulk restore, ensure all files are in the specified folder.
+- **Invalid backup structure:**
+  - Make sure your backup folder follows the expected structure.
+  - Ensure all JSON files are valid and match the Storyblok API format.
 - **API rate limits:**
   - The tool respects Storyblok's rate limits, but if you hit errors, try reducing the number of resources or wait before retrying.
-- **Reference/parent mapping issues:**
-  - Ensure all referenced resources are included in your bulk restore folder.
-  - The tool will attempt to update parent IDs and references automatically.
+- **Cross-resource reference issues:**
+  - Ensure all referenced resources are included in your backup.
+  - The tool will attempt to update references automatically.
 
 ### Verbose Output
 - Use the `--verbose` flag to get detailed logs for debugging.

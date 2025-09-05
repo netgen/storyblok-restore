@@ -29,6 +29,7 @@
   "license": "MIT",
   "dependencies": {
     "commander": "^14.0.0",
+    "glob": "^11.0.3",
     "minimist": "^1.2.8",
     "storyblok-js-client": "^5.0.0",
     "toposort": "^2.0.2"
@@ -38,6 +39,7 @@
     "@types/node": "^24.0.8",
     "@types/toposort": "^2.0.7",
     "eslint": "^9.3.0",
+    "prettier": "^3.6.2",
     "tsc-alias": "^1.8.16",
     "tsup": "^8.5.0",
     "typescript": "^5.0.0"
