@@ -33,9 +33,7 @@ export abstract class BaseResourceRestoreService<T extends StoryblokResource>
    * Returns the parameters for the API call.
    * @param resource The resource to restore.
    */
-  abstract getParams(
-    resource: T
-  ): Record<string, unknown> & { publish?: number };
+  abstract getParams(resource: T): any & { publish?: number };
 
   /**
    * Restores a resource by creating or updating it via the API client.
@@ -63,7 +61,7 @@ export abstract class BaseResourceRestoreService<T extends StoryblokResource>
     }
 
     console.log("Response", response);
-    return this.getResponseData(response as unknown as ISbResponse); // TODO fix
+    return this.getResponseData(response as unknown as ISbResponse); // TODO fix types
   }
 
   abstract getResponseData(response: ISbResponse): T;

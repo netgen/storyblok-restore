@@ -1,4 +1,5 @@
 import { AccessTokenRestoreService } from "../../resources/accessTokens/AccessTokenRestoreService.js";
+import { AssetRestoreService } from "../../resources/asset/AssetRestoreService.js";
 import { AssetFolderRestoreService } from "../../resources/assetFolder/AssetFolderRestoreService.js";
 import { CollaboratorRestoreService } from "../../resources/collaborators/CollaboratorRestoreService.js";
 import { ComponentRestoreService } from "../../resources/component/ComponentRestoreService.js";
@@ -6,6 +7,7 @@ import { ComponentGroupRestoreService } from "../../resources/componentGroup/Com
 import { DatasourceRestoreService } from "../../resources/datasource/DatasourceRestoreService.js";
 import { DatasourceEntryRestoreService } from "../../resources/datasourceEntry/DatasourceEntryRestoreService.js";
 import { StoryRestoreService } from "../../resources/story/StoryRestoreService.js";
+import { WebhookRestoreService } from "../../resources/webhook/WebhookRestoreService.js";
 import type { ResourceRestoreService } from "../services/ResourceRestoreService";
 
 /**
@@ -33,10 +35,12 @@ export class ResourceRestoreServiceFactory {
 export const resourceRestoreServiceFactory = new ResourceRestoreServiceFactory([
   new StoryRestoreService(),
   new AccessTokenRestoreService(),
+  new AssetRestoreService(),
   new AssetFolderRestoreService(),
   new CollaboratorRestoreService(),
   new ComponentGroupRestoreService(),
   new ComponentRestoreService(),
   new DatasourceRestoreService(),
   new DatasourceEntryRestoreService(),
+  new WebhookRestoreService(),
 ]);

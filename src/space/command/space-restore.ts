@@ -27,7 +27,9 @@ export async function runSpaceRestore(args: Record<string, any>) {
   };
 
   const RESOURCE_ORDER = [
-    "asset-folders",
+    "webhooks",
+    // "asset-folders",
+    // "assets",
     // "component-groups",
     // "components",
     // "stories",
