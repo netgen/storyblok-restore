@@ -24,7 +24,7 @@ export class BulkRestoreService<T extends StoryblokResource> {
   constructor(
     private restoreService: ResourceRestoreService<T>,
     private sortingStrategy?: SortingStrategy<T>,
-    private preprocessor?: ResourcePreprocessor<T>,
+    private preprocessor?: ResourcePreprocessor<T> | ResourcePreprocessor<T>[],
     private postProcessor?: ResourcePostProcessor<T>
   ) {}
 
@@ -49,9 +49,19 @@ export class BulkRestoreService<T extends StoryblokResource> {
     for (const resource of sorted) {
       try {
         console.log("Restoring resource", resource.id);
-        const processed =
-          this.preprocessor?.preprocess(resource, context, allContexts) ||
-          resource;
+
+        let processed = resource;
+        if (Array.isArray(this.preprocessor)) {
+          for (const preprocessor of this.preprocessor) {
+            processed = preprocessor.preprocess(resource, context, allContexts);
+          }
+        } else if (this.preprocessor) {
+          processed = this.preprocessor.preprocess(
+            resource,
+            context,
+            allContexts
+          );
+        }
 
         const importedResource = await this.restoreService.restore(
           processed,

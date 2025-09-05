@@ -8,16 +8,18 @@ export interface RestoreContext {
   apiClient: StoryblokClient;
 }
 
+export type ContextStores = {
+  oldIdToNewIdMap: Map<number, number>;
+  oldUuidToNewUuidMap: Map<string, string>;
+};
+
 /**
  * Context for bulk restore operations.
  * Extends RestoreContext with ID and UUID mappings for tracking old-to-new resource relationships.
  * @member oldIdToNewIdMap - Map of old IDs to new IDs.
  * @member oldUuidToNewUuidMap - Map of old UUIDs to new UUIDs.
  */
-export interface BulkRestoreContext extends RestoreContext {
-  oldIdToNewIdMap: Map<number, number>;
-  oldUuidToNewUuidMap: Map<string, string>;
-}
+export interface BulkRestoreContext extends RestoreContext, ContextStores {}
 
 /**
  * Options for restoring a single resource.
@@ -31,6 +33,7 @@ export interface RestoreOptions {
   create?: boolean;
   forceUpdate?: boolean;
   spaceId: string;
+  backupPath: string;
 }
 
 /**

@@ -18,23 +18,26 @@ export async function runSpaceRestore(args: Record<string, any>) {
 
   const backupRoot = args["backupFolder"];
 
+  console.log("backupRoot", backupRoot);
+
   const apiClient = new StoryblokClient({ oauthToken, region });
   const options = {
     publish: !!args.publish,
     create: !!args.create,
     forceUpdate: !!args.forceUpdate,
     spaceId: spaceId,
+    backupPath: backupRoot,
   };
 
   const RESOURCE_ORDER = [
-    "webhooks",
-    "access-tokens",
+    // "webhooks",
+    // "access-tokens",
     "component-groups",
     "components",
-    "datasources",
-    "datasource-entries",
+    // "datasources",
+    // "datasource-entries",
     "asset-folders",
-    // "assets", NOT IMPLEMENTED
+    "assets",
     "stories",
   ];
 

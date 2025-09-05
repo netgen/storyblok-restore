@@ -56,6 +56,7 @@ export async function runSingleRestore(args: Record<string, any>) {
     verbose: !!args.verbose,
     type: resourceType,
     spaceId,
+    backupPath: resourceFile,
   };
 
   const handler = resourceRestoreServiceFactory.getService(resourceType);

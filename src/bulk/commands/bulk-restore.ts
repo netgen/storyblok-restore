@@ -42,6 +42,7 @@ export async function runBulkRestore(args: Record<string, any>) {
   const oauthToken = args.token || process.env.STORYBLOK_OAUTH_TOKEN;
   const spaceId = args.space || process.env.STORYBLOK_SPACE_ID;
   const region = args.region || "eu";
+  const folder = args.folder;
 
   const apiClient = new StoryblokClient({ oauthToken, region });
   const context = {
@@ -56,12 +57,12 @@ export async function runBulkRestore(args: Record<string, any>) {
     propagate: !!args.propagate,
     verbose: !!args.verbose,
     spaceId,
+    backupPath: folder,
   };
 
   const bulkRestoreService =
     bulkRestoreServiceFactory.getServiceForType(resourceType);
 
-  const folder = args.folder;
   const resources: StoryblokResource[] = [];
 
   const files = fs.readdirSync(folder).filter((file) => file.endsWith(".json"));
