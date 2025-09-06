@@ -1,8 +1,8 @@
-import StoryblokClient from "storyblok-js-client";
-import type { ResourceType } from "@core/types/types";
-import type { Context } from "@core/types/context";
-import { SpaceRestoreService } from "@core/services/SpaceRestoreService";
 import { ResourceCollectionRestoreServiceFactory } from "@core/factories/ResourceCollectionRestoreServiceFactory";
+import { SpaceRestoreService } from "@core/services/SpaceRestoreService";
+import type { Context } from "@core/types/context";
+import type { ResourceType } from "@core/types/types";
+import StoryblokClient from "storyblok-js-client";
 
 type SpaceRestoreOptions = {
   oauthToken: string;
@@ -40,9 +40,6 @@ export async function spaceRestore({
       spaceId,
     });
   } catch (error) {
-    console.error("Space restore failed:", error);
     throw error;
   }
-
-  console.log("Space restore complete!");
 }

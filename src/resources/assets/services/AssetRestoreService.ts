@@ -48,7 +48,7 @@ export class AssetRestoreService
     _resourceMappingRegistry: ResourceMappingRegistry
   ): Promise<AssetResource> {
     logger.info(
-      `Starting asset restoration for ${resource.filename} (ID: ${resource.id})`
+      `\n\n\nStarting asset restoration for ${resource.filename} (ID: ${resource.id})`
     );
     logger.debug(`Asset details:`, {
       id: resource.id,

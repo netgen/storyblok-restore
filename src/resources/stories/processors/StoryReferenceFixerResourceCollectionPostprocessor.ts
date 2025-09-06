@@ -2,6 +2,7 @@ import type { ResourceCollectionPostprocessor } from "@core/processors/ResourceC
 import type { RestoreOptions, StoryblokResource } from "@core/types/types";
 import type { ResourceMappingRegistry } from "@core/services/ResourceMappingRegistry";
 import type { Context } from "@core/types/context";
+import { logger } from "@shared/logging";
 
 /**
  * Post-processor that fixes references between resources after bulk restore.
@@ -24,13 +25,25 @@ export class StoryReferenceFixerResourceCollectionPostprocessor
   ): Promise<void> {
     const { oldUuidToNewUuidMap } = resourceMappingRegistry.get("stories");
 
+    logger.info("\n🔗 Starting story reference fixing process");
+    logger.debug("UUID mappings to process:", {
+      totalMappings: oldUuidToNewUuidMap.size,
+      mappings: Array.from(oldUuidToNewUuidMap.entries()).map(
+        ([old, newUuid]) => ({
+          oldUuid: old,
+          newUuid: newUuid,
+        })
+      ),
+    });
+
     const failedFetchReferences: [string, unknown][] = [];
     let successfullyFetchedReferences = 0;
     let totalFetchedReferences = oldUuidToNewUuidMap.size;
 
-    console.log("Fixing references...");
+    logger.info(`Processing ${totalFetchedReferences} UUID mappings...`);
     for (const [oldUuid, newUuid] of oldUuidToNewUuidMap) {
       try {
+        logger.debug(`Searching for stories referencing UUID: ${oldUuid}`);
         const referencingStories = await this.context.apiClient.getAll(
           `spaces/${options.spaceId}/stories`,
           {
@@ -43,16 +56,24 @@ export class StoryReferenceFixerResourceCollectionPostprocessor
         const failedFixedReferences: [string, unknown][] = [];
         let totalFixedReferences = referencingStories.length;
 
-        console.log(
-          `Fixing ${totalFixedReferences} references for ${oldUuid} -> ${newUuid}`
+        logger.info(
+          `\n🔍 Found ${totalFixedReferences} stories referencing ${oldUuid} -> ${newUuid}`
+        );
+        logger.debug(
+          `Referencing stories:`,
+          referencingStories.map((s) => ({ id: s.id, name: s.name }))
         );
 
         for (const story of referencingStories) {
           try {
+            logger.debug(`Fetching full story data for story ${story.id}`);
             const fullStory = await this.context.apiClient.get(
               `spaces/${options.spaceId}/stories/${story.id}`
             );
 
+            logger.debug(
+              `Updating story ${story.id} content: replacing ${oldUuid} with ${newUuid}`
+            );
             const updatedContent = JSON.parse(
               JSON.stringify(fullStory.data.story).replaceAll(oldUuid, newUuid)
             );
@@ -65,41 +86,57 @@ export class StoryReferenceFixerResourceCollectionPostprocessor
             );
 
             successfullyFixedReferences++;
-            console.log(
-              `Successfully fixed ${successfullyFixedReferences}/${totalFixedReferences} references`
+            logger.info(
+              `✅ Fixed story ${story.id} (${successfullyFixedReferences}/${totalFixedReferences})`
             );
           } catch (error) {
-            console.error(`Failed to fix reference: ${oldUuid} -> ${newUuid}`);
+            logger.error(
+              `❌ Failed to fix story ${story.id}: ${oldUuid} -> ${newUuid}`
+            );
+            logger.debug(`Error details for story ${story.id}:`, error);
             failedFixedReferences.push([oldUuid, error]);
           }
         }
 
         if (failedFixedReferences.length > 0) {
-          console.error(
-            `Failed to fix ${failedFixedReferences.length} references:`
+          logger.warn(
+            `⚠️ Failed to fix ${failedFixedReferences.length} references for ${oldUuid}:`
           );
           for (const [reference, error] of failedFixedReferences) {
-            console.error(`Failed to fix reference: ${reference}`, error);
+            logger.error(`  - Failed to fix reference: ${reference}`, error);
           }
         }
 
         successfullyFetchedReferences++;
-        console.log(
-          `Successfully fetched ${successfullyFetchedReferences}/${totalFetchedReferences} references`
+        logger.info(
+          `📊 Completed UUID mapping ${successfullyFetchedReferences}/${totalFetchedReferences}: ${oldUuid} -> ${newUuid}`
         );
       } catch (error) {
-        console.error(`Failed to fetch reference: ${oldUuid} -> ${newUuid}`);
+        logger.error(
+          `❌ Failed to fetch references for ${oldUuid} -> ${newUuid}`
+        );
+        logger.debug(`Error details for UUID ${oldUuid}:`, error);
         failedFetchReferences.push([oldUuid, error]);
       }
     }
 
     if (failedFetchReferences.length > 0) {
-      console.error(
-        `Failed to fetch ${failedFetchReferences.length} references:`
+      logger.error(
+        `\n❌ Failed to fetch ${failedFetchReferences.length} UUID mappings:`
       );
       for (const [reference, error] of failedFetchReferences) {
-        console.error(`Failed to fetch reference: ${reference}`, error);
+        logger.error(`  - Failed to fetch reference: ${reference}`, error);
       }
+    }
+
+    logger.info(`\n🎉 Story reference fixing completed!`);
+    logger.info(
+      `📈 Summary: ${successfullyFetchedReferences}/${totalFetchedReferences} UUID mappings processed`
+    );
+    if (failedFetchReferences.length > 0) {
+      logger.warn(
+        `⚠️ ${failedFetchReferences.length} UUID mappings failed to process`
+      );
     }
   }
 }

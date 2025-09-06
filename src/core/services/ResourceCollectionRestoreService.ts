@@ -51,7 +51,7 @@ export abstract class ResourceCollectionRestoreService<
     }
 
     logger.info(
-      `Starting ${this.resourceType} restoration for ${resources.length} resources`
+      `\nStarting ${this.resourceType} restoration for ${resources.length} resources`
     );
     logger.debug(`Restore options:`, options);
     logger.debug(
