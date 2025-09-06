@@ -3,17 +3,17 @@
   "version": "0.1.0",
   "type": "module",
   "description": "CLI and library for backuping and restoring Storyblok resources, supporting both single and bulk operations.",
-  "main": "dist/shared/index.js",
-  "types": "dist/shared/index.d.ts",
   "bin": {
-    "storyblok-backup-and-restore": "dist/index.js"
+    "storyblok-backup-and-restore": "cli.js"
   },
   "files": [
     "dist/",
+    "src/",
+    "cli.js",
     "README.md"
   ],
   "scripts": {
-    "build": "tsup src/cli/index.ts --format esm --dts --out-dir dist --clean",
+    "build": "tsc && tsc-alias",
     "prepublishOnly": "npm run build",
     "lint": "eslint . --ext .ts",
     "test": "vitest",
@@ -34,7 +34,8 @@
     "glob": "^11.0.3",
     "minimist": "^1.2.8",
     "storyblok-js-client": "^5.0.0",
-    "toposort": "^2.0.2"
+    "toposort": "^2.0.2",
+    "tsx": "^4.20.5"
   },
   "devDependencies": {
     "@types/minimist": "^1.2.5",
@@ -46,6 +47,7 @@
     "prettier": "^3.6.2",
     "tsc-alias": "^1.8.16",
     "tsup": "^8.5.0",
+    "tsx": "^4.20.5",
     "typescript": "^5.0.0",
     "vitest": "^3.2.4"
   }

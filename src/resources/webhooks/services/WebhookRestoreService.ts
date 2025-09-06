@@ -31,4 +31,10 @@ export class WebhookRestoreService extends BaseResourceRestoreService<WebhookRes
   getResponseData(response: ISbResponse): StoryblokResource {
     return response.data.webhook_endpoint;
   }
+
+  handleError(error: unknown): never {
+    throw new Error(
+      `Webhook restoration failed: ${error instanceof Error ? error.message : String(error)}`
+    );
+  }
 }

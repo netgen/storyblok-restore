@@ -1,8 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import {
-  ResourceMappingRegistry,
-  type ResourceMappingData,
-} from "./ResourceMappingRegistry";
+import { ResourceMappingRegistry } from "./ResourceMappingRegistry";
 import { ResourceType } from "../types/types";
 
 describe("ResourceMappingRegistry", () => {

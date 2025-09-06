@@ -25,4 +25,10 @@ export class ComponentGroupRestoreService extends BaseResourceRestoreService<Sto
   getResponseData(response: ISbResponse): StoryblokResource {
     return response.data.component_group;
   }
+
+  handleError(error: unknown): never {
+    throw new Error(
+      `Component group restoration failed: ${error instanceof Error ? error.message : String(error)}`
+    );
+  }
 }

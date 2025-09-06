@@ -25,4 +25,10 @@ export class AccessTokenRestoreService extends BaseResourceRestoreService<Storyb
   getResponseData(response: ISbResponse): StoryblokResource {
     return response.data;
   }
+
+  handleError(error: unknown): never {
+    throw new Error(
+      `Access token restoration failed: ${error instanceof Error ? error.message : String(error)}`
+    );
+  }
 }

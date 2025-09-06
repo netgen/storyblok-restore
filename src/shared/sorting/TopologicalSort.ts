@@ -16,23 +16,37 @@ export class TopologicalSortStrategy<
    * @returns The sorted array of resources.
    */
   sort(resources: TResource[]): TResource[] {
-    const idToResourceMap = new Map<string | number, TResource>();
-    resources.forEach((resource) => idToResourceMap.set(resource.id, resource));
+    if (!resources || resources.length === 0) {
+      return resources;
+    }
 
-    const parentDependencies: [number | null, number][] = resources.map(
-      (resource) => {
-        if (resource.parent_id) {
-          return [resource.parent_id, resource.id];
-        } else {
-          return [null, resource.id];
+    try {
+      const idToResourceMap = new Map<string | number, TResource>();
+      resources.forEach((resource) =>
+        idToResourceMap.set(resource.id, resource)
+      );
+
+      const parentDependencies: [number | null, number][] = resources.map(
+        (resource) => {
+          if (resource.parent_id) {
+            return [resource.parent_id, resource.id];
+          } else {
+            return [null, resource.id];
+          }
         }
-      }
-    );
+      );
 
-    const sortedIds = toposort(parentDependencies).filter((id) => id !== null);
+      const sortedIds = toposort(parentDependencies).filter(
+        (id) => id !== null
+      );
 
-    return sortedIds
-      .map((id) => idToResourceMap.get(id))
-      .filter((item) => item !== undefined);
+      return sortedIds
+        .map((id) => idToResourceMap.get(id))
+        .filter((item) => item !== undefined);
+    } catch (error) {
+      throw new Error(
+        `Topological sort failed: ${error instanceof Error ? error.message : String(error)}`
+      );
+    }
   }
 }

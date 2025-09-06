@@ -25,4 +25,25 @@ export class AssetFolderRestoreService extends BaseResourceRestoreService<Storyb
   getResponseData(response: ISbResponse): StoryblokResource {
     return response.data.asset_folder;
   }
+
+  handleError(error: unknown): never {
+    console.error(
+      "Error restoring asset folder",
+      typeof error,
+      error instanceof Error,
+      error
+    );
+
+    if (
+      error &&
+      typeof error === "object" &&
+      "status" in error &&
+      error.status === 409
+    ) {
+      throw new Error(`Asset folder already exists`);
+    }
+    throw new Error(
+      `Failed to restore asset folder: ${error instanceof Error ? error.message : String(error)}`
+    );
+  }
 }

@@ -3,15 +3,17 @@ import { ResourceType } from "@core/types/types";
 import { spaceRestore } from "../entries/space-restore";
 
 export async function runSpaceRestoreCli(args: Record<string, string>) {
+  console.log("Running space restore CLI", args);
   const oauthToken = args.token || process.env.STORYBLOK_OAUTH_TOKEN;
-  const spaceId = args["space-id"] || process.env.STORYBLOK_SPACE_ID;
+  const spaceId = args["spaceId"] || process.env.STORYBLOK_SPACE_ID;
   const region = args.region || "eu";
-  const resourceTypes = args["resource-types"]?.split(",");
-  const backupPath = args["backup-path"];
+  const resourceTypes = args["resourceTypes"]?.split(",");
+  const backupPath = args["backupPath"];
 
   const filteredResourceTypes = resourceTypes
     ?.map((resourceType) => {
-      if (resourceType in ResourceType) return resourceType as ResourceType;
+      if (Object.values(ResourceType).includes(resourceType as ResourceType))
+        return resourceType as ResourceType;
       console.error(`Invalid resource type: ${resourceType}. Skipping it.`);
       return null;
     })

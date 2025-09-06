@@ -39,6 +39,12 @@ class TestResourceRestoreService extends BaseResourceRestoreService<TestResource
   getResponseData(response: any): TestResource {
     return response.data.test_resource;
   }
+
+  handleError(error: unknown): never {
+    throw new Error(
+      `Test resource restoration failed: ${error instanceof Error ? error.message : String(error)}`
+    );
+  }
 }
 
 describe("BaseResourceRestoreService", () => {

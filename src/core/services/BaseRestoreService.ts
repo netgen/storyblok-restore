@@ -33,6 +33,8 @@ export abstract class BaseResourceRestoreService<T extends StoryblokResource>
    */
   abstract getParams(resource: T): any & { publish?: number };
 
+  abstract handleError(error: unknown): never;
+
   /**
    * Restores a resource by creating or updating it via the API client.
    * @param resource The resource to restore.
@@ -45,18 +47,19 @@ export abstract class BaseResourceRestoreService<T extends StoryblokResource>
     options: RestoreOptions,
     _resourceMappingRegistry: ResourceMappingRegistry
   ): Promise<T> {
-    let params = this.getParams(resource);
-    params.publish = 1;
+    try {
+      const url = this.getCreateUrl(resource, options);
+      let params = this.getParams(resource);
+      params.publish = 1;
 
-    const url = this.getCreateUrl(resource, options);
-
-    console.log("Calling API", url, params);
-    const response = await this.context.apiClient.post(
-      url,
-      params as ISbStoriesParams
-    );
-
-    return this.getResponseData(response as unknown as ISbResponse); // TODO fix types
+      const response = await this.context.apiClient.post(
+        url,
+        params as ISbStoriesParams
+      );
+      return this.getResponseData(response as unknown as ISbResponse); // TODO fix types
+    } catch (error) {
+      this.handleError(error);
+    }
   }
 
   abstract getResponseData(response: ISbResponse): T;

@@ -1,5 +1,5 @@
 import type { ResourceIntegrationTestConfig } from "src/tests/resource-integration.test";
-import AssetFolderResourceCollectionRestoreService from "../services/AssetFolderBulkRestoreService";
+import AssetFolderResourceCollectionRestoreService from "../services/AssetFolderResourceCollectionRestoreService";
 import { ResourceType } from "@core/types/types";
 
 const config: ResourceIntegrationTestConfig = {

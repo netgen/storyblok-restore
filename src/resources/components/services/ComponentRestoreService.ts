@@ -25,4 +25,10 @@ export class ComponentRestoreService extends BaseResourceRestoreService<Storyblo
   getResponseData(response: ISbResponse): StoryblokResource {
     return response.data.component;
   }
+
+  handleError(error: unknown): never {
+    throw new Error(
+      `Component restoration failed: ${error instanceof Error ? error.message : String(error)}`
+    );
+  }
 }

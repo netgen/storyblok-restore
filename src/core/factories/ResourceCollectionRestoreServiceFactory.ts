@@ -14,8 +14,10 @@ export class ResourceCollectionRestoreServiceFactory {
 
   static async create() {
     const serviceFiles = await glob(
-      "@resources/**/*ResourceCollectionRestoreService.ts"
+      "src/resources/**/*ResourceCollectionRestoreService.ts"
     );
+
+    console.log("Service files", serviceFiles); // LOGGER
 
     const creators = await Promise.all(
       serviceFiles.map(async (file) => {
@@ -36,6 +38,8 @@ export class ResourceCollectionRestoreServiceFactory {
         };
       })
     );
+
+    console.log("Creators", creators); // LOGGER
 
     return new ResourceCollectionRestoreServiceFactory(creators);
   }

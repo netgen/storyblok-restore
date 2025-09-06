@@ -25,4 +25,10 @@ export class DatasourceEntryRestoreService extends BaseResourceRestoreService<St
   getResponseData(response: ISbResponse): StoryblokResource {
     return response.data.datasource_entry;
   }
+
+  handleError(error: unknown): never {
+    throw new Error(
+      `Datasource entry restoration failed: ${error instanceof Error ? error.message : String(error)}`
+    );
+  }
 }

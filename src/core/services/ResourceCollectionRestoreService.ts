@@ -45,45 +45,33 @@ export abstract class ResourceCollectionRestoreService<
     options: RestoreOptions,
     resourceMappingRegistry: ResourceMappingRegistry
   ) {
-    const sorted = this.sortingStrategy?.sort(resources) || resources;
+    if (!resources || resources.length === 0) {
+      throw new Error(`No ${this.resourceType} resources to restore`);
+    }
 
-    const failedRestoredResources: [T, unknown][] = [];
-    let successfullyRestoredResources = 0;
+    const sorted = this.sortingStrategy?.sort(resources) || resources;
+    const results = {
+      succeeded: 0,
+      failed: 0,
+      errors: [] as Array<{ resource: T; error: unknown }>,
+    };
 
     for (const resource of sorted) {
       try {
-        let processed = resource;
-        if (Array.isArray(this.resourcePreprocessor)) {
-          for (const preprocessor of this.resourcePreprocessor) {
-            processed = preprocessor.preprocess(
-              resource,
-              resourceMappingRegistry
-            );
-          }
-        } else if (this.resourcePreprocessor) {
-          processed = this.resourcePreprocessor.preprocess(
-            resource,
-            resourceMappingRegistry
-          );
-        }
-
-        console.log("Restoring resource", processed);
-        const importedResource = await this.restoreService.restore(
-          processed,
+        await this.restoreSingleResource(
+          resource,
           options,
           resourceMappingRegistry
         );
-
-        resourceMappingRegistry
-          .get(this.resourceType)
-          .oldIdToNewIdMap.set(resource.id, importedResource.id);
-        resourceMappingRegistry
-          .get(this.resourceType)
-          .oldUuidToNewUuidMap.set(resource.uuid, importedResource.uuid);
-
-        successfullyRestoredResources++;
+        results.succeeded++;
       } catch (error) {
-        failedRestoredResources.push([resource, error]);
+        results.failed++;
+        results.errors.push({ resource, error });
+        console.error(
+          // LOGGER
+          `Failed to restore ${this.resourceType} ${resource.id}:`,
+          error instanceof Error ? error.message : String(error)
+        );
       }
     }
 
@@ -93,11 +81,42 @@ export abstract class ResourceCollectionRestoreService<
       resourceMappingRegistry
     );
 
-    if (failedRestoredResources.length > 0) {
-      for (const [_resource, _error] of failedRestoredResources) {
-        // console.error("Failed to restore resource", resource, error);
+    console.log(
+      // LOGGER
+      `${this.resourceType} restoration complete: ${results.succeeded} succeeded, ${results.failed} failed`
+    );
+  }
+
+  private async restoreSingleResource(
+    resource: T,
+    options: RestoreOptions,
+    resourceMappingRegistry: ResourceMappingRegistry
+  ): Promise<void> {
+    let processed = resource;
+
+    if (Array.isArray(this.resourcePreprocessor)) {
+      for (const preprocessor of this.resourcePreprocessor) {
+        processed = preprocessor.preprocess(resource, resourceMappingRegistry);
       }
+    } else if (this.resourcePreprocessor) {
+      processed = this.resourcePreprocessor.preprocess(
+        resource,
+        resourceMappingRegistry
+      );
     }
+
+    const importedResource = await this.restoreService.restore(
+      processed,
+      options,
+      resourceMappingRegistry
+    );
+
+    resourceMappingRegistry
+      .get(this.resourceType)
+      .oldIdToNewIdMap.set(resource.id, importedResource.id);
+    resourceMappingRegistry
+      .get(this.resourceType)
+      .oldUuidToNewUuidMap.set(resource.uuid, importedResource.uuid);
   }
 
   /**

@@ -25,4 +25,10 @@ export class CollaboratorRestoreService extends BaseResourceRestoreService<Story
   getResponseData(response: ISbResponse): StoryblokResource {
     return response.data.collaborator;
   }
+
+  handleError(error: unknown): never {
+    throw new Error(
+      `Collaborator restoration failed: ${error instanceof Error ? error.message : String(error)}`
+    );
+  }
 }

@@ -12,7 +12,7 @@ vi.mock("path");
 class MockServiceClass implements ResourceRestoreService<StoryblokResource> {
   static readonly RESOURCE_TYPE = "stories";
 
-  constructor(private _context: Context) {}
+  constructor(_context: Context) {}
 
   canHandle = vi.fn().mockReturnValue(true);
   restore = vi.fn().mockResolvedValue({} as StoryblokResource);
@@ -24,7 +24,7 @@ class MockAssetServiceClass
 {
   static readonly RESOURCE_TYPE = "assets";
 
-  constructor(private _context: Context) {}
+  constructor(_context: Context) {}
 
   canHandle = vi.fn().mockReturnValue(true);
   restore = vi.fn().mockResolvedValue({} as StoryblokResource);

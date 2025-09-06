@@ -83,45 +83,57 @@ export class AssetRestoreService
   ): Promise<AssetResource> {
     const { id, ...assetWithoutId } = resource;
 
-    console.log("Requesting signature...");
-    const signatureResponse = (await this.context.apiClient.post(
-      `spaces/${options.spaceId}/assets`,
-      { ...assetWithoutId, validate_upload: 1 } as ISbStoriesParams
-    )) as unknown as { data: SignatureResponse };
-    const signatureData = signatureResponse.data;
+    // Request signature
+    let signatureData: SignatureResponse;
+    try {
+      const signatureResponse = (await this.context.apiClient.post(
+        `spaces/${options.spaceId}/assets`,
+        { ...assetWithoutId, validate_upload: 1 } as ISbStoriesParams
+      )) as unknown as { data: SignatureResponse };
+      signatureData = signatureResponse.data;
+    } catch (error) {
+      throw new Error(
+        `Failed to request upload signature for asset ${resource.id}: ${error instanceof Error ? error.message : String(error)}`
+      );
+    }
 
-    console.log("Signature received", signatureData);
-
+    // Validate file exists
     const fileExtension = resource.filename.split(".").pop();
-
     const filePath = path.join(
       options.backupPath,
       "asset-files",
       `${resource.id.toString()}.${fileExtension ?? ""}`
     );
 
-    console.log("Checking if file exists", filePath);
     if (!fs.existsSync(filePath)) {
-      throw new Error(`File not found: ${filePath}`);
+      throw new Error(`Asset file not found: ${filePath}`);
     }
 
-    console.log("Uploading file...", filePath);
-    await uploadAsset({
-      filename: resource.short_filename,
-      signed_response_object: signatureData,
-      filePath,
-    });
-    console.log("File uploaded");
+    // Upload file
+    try {
+      await uploadAsset({
+        filename: resource.short_filename,
+        signed_response_object: signatureData,
+        filePath,
+      });
+    } catch (error) {
+      throw new Error(
+        `Failed to upload asset file ${resource.filename}: ${error instanceof Error ? error.message : String(error)}`
+      );
+    }
 
-    console.log("Finishing upload...");
-    const finishUploadResponse = await this.context.apiClient.get(
-      `spaces/${options.spaceId}/assets/${signatureData.id}/finish_upload`
-    );
-    console.log("Finish upload response", finishUploadResponse);
+    // Finish upload
+    let finishUploadResponse;
+    try {
+      finishUploadResponse = await this.context.apiClient.get(
+        `spaces/${options.spaceId}/assets/${signatureData.id}/finish_upload`
+      );
+    } catch (error) {
+      throw new Error(
+        `Failed to finish asset upload for ${resource.id}: ${error instanceof Error ? error.message : String(error)}`
+      );
+    }
 
-    console.log({ finishUploadResponse, signatureData });
-
-    // Return the asset data from the signature response
     return finishUploadResponse as unknown as AssetResource;
   }
 }
