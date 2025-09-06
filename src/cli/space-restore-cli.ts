@@ -1,8 +1,15 @@
 #!/usr/bin/env node
 import { ResourceType } from "@core/types/types";
 import { spaceRestore } from "../entries/space-restore";
+import { setLogLevel, LogLevel } from "@shared/logging";
 
 export async function runSpaceRestoreCli(args: Record<string, string>) {
+  if (args.verbose) {
+    setLogLevel(LogLevel.DEBUG);
+  } else {
+    setLogLevel(LogLevel.INFO);
+  }
+
   console.log("Running space restore CLI", args);
   const oauthToken = args.token || process.env.STORYBLOK_OAUTH_TOKEN;
   const spaceId = args["spaceId"] || process.env.STORYBLOK_SPACE_ID;

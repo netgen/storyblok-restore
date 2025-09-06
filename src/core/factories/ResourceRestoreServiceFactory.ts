@@ -3,6 +3,7 @@ import path from "path";
 import type { Context } from "../types/context";
 import type { ResourceType } from "../types/types";
 import type { ResourceRestoreService } from "../services/ResourceRestoreService";
+import { logger } from "@shared/logging";
 
 type ResourceRestoreServiceCreator = {
   resourceType: ResourceType;
@@ -16,6 +17,8 @@ export class ResourceRestoreServiceFactory {
     const serviceFiles = (
       await glob("@resources/**/*RestoreService.ts")
     ).filter((file) => !file.endsWith("ResourceCollectionRestoreService.ts"));
+
+    logger.debug("ResourceRestore service files", serviceFiles);
 
     const creators = await Promise.all(
       serviceFiles.map(async (file) => {
@@ -36,6 +39,8 @@ export class ResourceRestoreServiceFactory {
         };
       })
     );
+
+    logger.debug("ResourceRestore service creators", creators);
 
     return new ResourceRestoreServiceFactory(creators);
   }
