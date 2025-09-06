@@ -4,7 +4,7 @@ import type { StoryblokResource } from "@core/types/types";
 import type { Context } from "@core/types/context";
 import { WebhookRestoreService } from "./WebhookRestoreService";
 
-export default class WebhookBulkRestoreService extends ResourceCollectionRestoreService<StoryblokResource> {
+export default class WebhookResourceCollectionRestoreService extends ResourceCollectionRestoreService<StoryblokResource> {
   static RESOURCE_TYPE: ResourceType = ResourceType.WEBHOOKS;
 
   constructor(context: Context) {

@@ -1,0 +1,17 @@
+import type { ResourceIntegrationTestConfig } from "src/tests/resource-integration.test";
+import { ResourceType } from "@core/types/types";
+
+const config: ResourceIntegrationTestConfig = {
+  name: "",
+  description: "",
+  ServiceClass: ,
+  resources: [
+  ],
+  initialMappingRegistry: {
+    
+  }
+  expectedFinalMappingRegistry: {
+  },
+};
+
+export default config;

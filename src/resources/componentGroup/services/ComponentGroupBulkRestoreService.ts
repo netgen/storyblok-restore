@@ -6,7 +6,7 @@ import type { StoryblokResource } from "@core/types/types";
 import type { Context } from "@core/types/context";
 import { ComponentGroupRestoreService } from "./ComponentGroupRestoreService";
 
-export default class ComponentGroupBulkRestoreService extends ResourceCollectionRestoreService<StoryblokResource> {
+export default class ComponentGroupResourceCollectionRestoreService extends ResourceCollectionRestoreService<StoryblokResource> {
   static RESOURCE_TYPE: ResourceType = ResourceType.COMPONENT_GROUPS;
 
   constructor(context: Context) {

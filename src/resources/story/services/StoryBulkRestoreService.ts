@@ -6,12 +6,12 @@ import type { Context } from "@core/types/context";
 import { StoryReferenceFixerResourceCollectionPostprocessor } from "../processors/StoryReferenceFixerResourceCollectionPostprocessor";
 import { StoryRestoreService } from "./StoryRestoreService";
 
-export default class StoryBulkRestoreService extends ResourceCollectionRestoreService<StoryblokResource> {
+export default class StoryResourceCollectionRestoreService extends ResourceCollectionRestoreService<StoryblokResource> {
   static RESOURCE_TYPE: ResourceType = ResourceType.STORIES;
 
   constructor(context: Context) {
     super(
-      StoryBulkRestoreService.RESOURCE_TYPE,
+      StoryResourceCollectionRestoreService.RESOURCE_TYPE,
       new StoryRestoreService(context),
       new TopologicalSortStrategy(),
       [

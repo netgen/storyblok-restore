@@ -6,16 +6,17 @@ import type { StoryblokResource } from "@core/types/types";
  * Sorting strategy that performs a topological sort on nestable Storyblok resources.
  * Ensures that parent resources are restored before their children.
  */
-export class TopologicalSortStrategy
-  implements SortingStrategy<StoryblokResource>
+export class TopologicalSortStrategy<
+  TResource extends StoryblokResource = StoryblokResource,
+> implements SortingStrategy<TResource>
 {
   /**
    * Sorts resources using topological order based on parent-child relationships.
    * @param resources The array of nestable resources to sort.
    * @returns The sorted array of resources.
    */
-  sort(resources: StoryblokResource[]): StoryblokResource[] {
-    const idToResourceMap = new Map<string | number, StoryblokResource>();
+  sort(resources: TResource[]): TResource[] {
+    const idToResourceMap = new Map<string | number, TResource>();
     resources.forEach((resource) => idToResourceMap.set(resource.id, resource));
 
     const parentDependencies: [number | null, number][] = resources.map(

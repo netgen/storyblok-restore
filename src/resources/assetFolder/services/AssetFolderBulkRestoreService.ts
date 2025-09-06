@@ -6,7 +6,7 @@ import { FieldReplacerPreprocessor } from "@shared/processors/FieldReplacerPrepr
 import { ResourceType } from "@core/types/types";
 import type { Context } from "@core/types/context";
 
-export default class AssetFolderBulkRestoreService extends ResourceCollectionRestoreService<StoryblokResource> {
+export default class AssetFolderResourceCollectionRestoreService extends ResourceCollectionRestoreService<StoryblokResource> {
   static RESOURCE_TYPE: ResourceType = ResourceType.ASSET_FOLDERS;
 
   constructor(context: Context) {

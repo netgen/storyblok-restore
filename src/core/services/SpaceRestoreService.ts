@@ -3,19 +3,9 @@ import path from "path";
 import type { Context } from "../types/context";
 import { ResourceMappingRegistry } from "./ResourceMappingRegistry";
 import type { ResourceCollectionRestoreServiceFactory } from "../factories/ResourceCollectionRestoreServiceFactory";
-import type { ResourceType, RestoreOptions } from "../types/types";
+import { ResourceType, type RestoreOptions } from "../types/types";
 
-const RESOURCE_ORDER: ResourceType[] = [
-  "webhooks",
-  "access-tokens",
-  "component-groups",
-  "components",
-  "datasources",
-  "datasource-entries",
-  "asset-folders",
-  "assets",
-  "stories",
-];
+const RESOURCE_ORDER = Object.values(ResourceType);
 
 export class SpaceRestoreService {
   private resourceMappingRegistry: ResourceMappingRegistry =

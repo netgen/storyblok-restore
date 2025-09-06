@@ -15,7 +15,7 @@ export class ResourceRestoreServiceFactory {
   static async create() {
     const serviceFiles = (
       await glob("@resources/**/*RestoreService.ts")
-    ).filter((file) => !file.endsWith("BulkRestoreService.ts"));
+    ).filter((file) => !file.endsWith("ResourceCollectionRestoreService.ts"));
 
     const creators = await Promise.all(
       serviceFiles.map(async (file) => {

@@ -50,6 +50,7 @@ export abstract class BaseResourceRestoreService<T extends StoryblokResource>
 
     const url = this.getCreateUrl(resource, options);
 
+    console.log("Calling API", url, params);
     const response = await this.context.apiClient.post(
       url,
       params as ISbStoriesParams

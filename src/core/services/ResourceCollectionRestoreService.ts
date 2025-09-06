@@ -67,6 +67,7 @@ export abstract class ResourceCollectionRestoreService<
           );
         }
 
+        console.log("Restoring resource", processed);
         const importedResource = await this.restoreService.restore(
           processed,
           options,

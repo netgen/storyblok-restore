@@ -1,6 +1,7 @@
 export const ResourceType = {
   WEBHOOKS: "webhooks",
-  ACCESS_TOKENS: "access-tokens",
+  ACCESS_TOKEN: "access-token",
+  COLLABORATORS: "collaborators",
   COMPONENT_GROUPS: "component-groups",
   COMPONENTS: "components",
   DATASOURCES: "datasources",
@@ -8,8 +9,6 @@ export const ResourceType = {
   ASSET_FOLDERS: "asset-folders",
   ASSETS: "assets",
   STORIES: "stories",
-  ACCESS_TOKEN: "access-token",
-  COLLABORATORS: "collaborators",
 } as const;
 
 export type ResourceType = (typeof ResourceType)[keyof typeof ResourceType];

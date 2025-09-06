@@ -4,7 +4,7 @@ import type { StoryblokResource } from "@core/types/types";
 import type { Context } from "@core/types/context";
 import { CollaboratorRestoreService } from "./CollaboratorRestoreService";
 
-export default class CollaboratorBulkRestoreService extends ResourceCollectionRestoreService<StoryblokResource> {
+export default class CollaboratorResourceCollectionRestoreService extends ResourceCollectionRestoreService<StoryblokResource> {
   static RESOURCE_TYPE: ResourceType = ResourceType.COLLABORATORS;
 
   constructor(context: Context) {

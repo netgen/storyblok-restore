@@ -13,7 +13,9 @@ export class ResourceCollectionRestoreServiceFactory {
   constructor(private services: ResourceCollectionRestoreServiceCreator[]) {}
 
   static async create() {
-    const serviceFiles = await glob("@resources/**/*BulkRestoreService.ts");
+    const serviceFiles = await glob(
+      "@resources/**/*ResourceCollectionRestoreService.ts"
+    );
 
     const creators = await Promise.all(
       serviceFiles.map(async (file) => {
