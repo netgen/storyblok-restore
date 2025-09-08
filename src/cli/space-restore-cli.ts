@@ -2,6 +2,7 @@
 import { ResourceType } from "@core/types/types";
 import { spaceRestore } from "../entries/space-restore";
 import { setLogLevel, LogLevel, logger } from "@shared/logging";
+import { prepareBackup } from "../../scripts/prepare-backup";
 
 export async function runSpaceRestoreCli(args: Record<string, string>) {
   logger.info("\n🚀 Starting Storyblok Space Restore CLI");
@@ -61,6 +62,9 @@ export async function runSpaceRestoreCli(args: Record<string, string>) {
   }
 
   try {
+    // Prepare backup folder before restoration
+    await prepareBackup({ backupPath: backupPath! });
+
     logger.info("\n🔄 Starting space restoration process...");
     await spaceRestore({
       spaceId: spaceId!,
@@ -70,6 +74,18 @@ export async function runSpaceRestoreCli(args: Record<string, string>) {
       resourceTypes: filteredResourceTypes,
     });
     logger.info("\n🎉 Space restoration completed successfully!");
+
+    // Check if webhooks were restored and warn about secret limitation
+    const hasWebhooks =
+      !filteredResourceTypes || filteredResourceTypes.includes("webhooks");
+    if (hasWebhooks) {
+      logger.warn("\n⚠️  IMPORTANT WEBHOOK NOTICE:");
+      logger.warn("   Webhook secrets cannot be restored via API.");
+      logger.warn(
+        "   Please manually check and update webhook secrets in your Storyblok space."
+      );
+      logger.warn("   Go to: Settings > Webhooks > [Your Webhook] > Secret");
+    }
   } catch (error) {
     logger.error("\n❌ Space restoration failed:");
     logger.error(error instanceof Error ? error.message : String(error));

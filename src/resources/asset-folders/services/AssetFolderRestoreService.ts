@@ -27,23 +27,11 @@ export class AssetFolderRestoreService extends BaseResourceRestoreService<Storyb
   }
 
   handleError(error: unknown): never {
-    console.error(
-      "Error restoring asset folder",
-      typeof error,
-      error instanceof Error,
-      error
-    );
+    const message =
+      typeof error === "object" && error !== null && "message" in error
+        ? error.message
+        : String(error);
 
-    if (
-      error &&
-      typeof error === "object" &&
-      "status" in error &&
-      error.status === 409
-    ) {
-      throw new Error(`Asset folder already exists`);
-    }
-    throw new Error(
-      `Failed to restore asset folder: ${error instanceof Error ? error.message : String(error)}`
-    );
+    throw new Error(`Failed to restore asset folder: ${message}`);
   }
 }

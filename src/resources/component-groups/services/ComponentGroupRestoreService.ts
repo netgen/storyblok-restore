@@ -27,8 +27,13 @@ export class ComponentGroupRestoreService extends BaseResourceRestoreService<Sto
   }
 
   handleError(error: unknown): never {
-    throw new Error(
-      `Component group restoration failed: ${error instanceof Error ? error.message : String(error)}`
-    );
+    // @ts-expect-error
+    console.log(error, error.response.data);
+    const message =
+      typeof error === "object" && error !== null && "message" in error
+        ? error.message
+        : String(error);
+
+    throw new Error(`Component group restoration failed: ${message}`);
   }
 }

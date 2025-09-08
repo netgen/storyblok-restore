@@ -53,9 +53,9 @@ export class ConsoleLogger implements Logger {
       }
       const newlines = message.slice(0, i);
       const content = message.slice(i);
-      return `${newlines}${formattedPrefix} ${content}`;
+      return `${newlines}${formattedPrefix}${content}`;
     }
 
-    return `${formattedPrefix} ${message}`;
+    return `${formattedPrefix}${message}`;
   }
 }

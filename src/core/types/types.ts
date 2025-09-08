@@ -1,6 +1,6 @@
 export const ResourceType = {
   WEBHOOKS: "webhooks",
-  ACCESS_TOKEN: "access-token",
+  ACCESS_TOKENS: "access-tokens",
   COLLABORATORS: "collaborators",
   COMPONENT_GROUPS: "component-groups",
   COMPONENTS: "components",

@@ -47,7 +47,8 @@ export abstract class ResourceCollectionRestoreService<
     resourceMappingRegistry: ResourceMappingRegistry
   ) {
     if (!resources || resources.length === 0) {
-      throw new Error(`No ${this.resourceType} resources to restore`);
+      logger.warn(`No ${this.resourceType} resources to restore`);
+      return;
     }
 
     logger.info(

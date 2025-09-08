@@ -1,9 +1,8 @@
-import { FieldReplacerPreprocessor } from "@shared/processors/FieldReplacerPreprocessor";
 import { ResourceCollectionRestoreService } from "@core/services/ResourceCollectionRestoreService";
-import { TopologicalSortStrategy } from "@shared/sorting/TopologicalSort";
-import { ResourceType } from "@core/types/types";
-import type { StoryblokResource } from "@core/types/types";
 import type { Context } from "@core/types/context";
+import type { StoryblokResource } from "@core/types/types";
+import { ResourceType } from "@core/types/types";
+import { FieldReplacerPreprocessor } from "@shared/processors/FieldReplacerPreprocessor";
 import { DatasourceEntryRestoreService } from "./DatasourceEntryRestoreService";
 
 export default class DatasourceEntryResourceCollectionRestoreService extends ResourceCollectionRestoreService<StoryblokResource> {
@@ -13,7 +12,7 @@ export default class DatasourceEntryResourceCollectionRestoreService extends Res
     super(
       ResourceType.DATASOURCE_ENTRIES,
       new DatasourceEntryRestoreService(context),
-      new TopologicalSortStrategy(),
+      undefined,
       [
         new FieldReplacerPreprocessor({
           resourceField: "datasource_id",

@@ -27,8 +27,11 @@ export class DatasourceRestoreService extends BaseResourceRestoreService<Storybl
   }
 
   handleError(error: unknown): never {
-    throw new Error(
-      `Datasource restoration failed: ${error instanceof Error ? error.message : String(error)}`
-    );
+    const message =
+      typeof error === "object" && error !== null && "message" in error
+        ? error.message
+        : String(error);
+
+    throw new Error(`Datasource restoration failed: ${message}`);
   }
 }

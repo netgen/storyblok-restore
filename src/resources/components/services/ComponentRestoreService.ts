@@ -27,8 +27,11 @@ export class ComponentRestoreService extends BaseResourceRestoreService<Storyblo
   }
 
   handleError(error: unknown): never {
-    throw new Error(
-      `Component restoration failed: ${error instanceof Error ? error.message : String(error)}`
-    );
+    const message =
+      typeof error === "object" && error !== null && "message" in error
+        ? error.message
+        : String(error);
+
+    throw new Error(`Component restoration failed: ${message}`);
   }
 }

@@ -27,8 +27,11 @@ export class CollaboratorRestoreService extends BaseResourceRestoreService<Story
   }
 
   handleError(error: unknown): never {
-    throw new Error(
-      `Collaborator restoration failed: ${error instanceof Error ? error.message : String(error)}`
-    );
+    const message =
+      typeof error === "object" && error !== null && "message" in error
+        ? error.message
+        : String(error);
+
+    throw new Error(`Collaborator restoration failed: ${message}`);
   }
 }

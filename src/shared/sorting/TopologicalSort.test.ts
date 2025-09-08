@@ -4,13 +4,16 @@ import type { StoryblokResource } from "@core/types/types";
 
 interface TestResource extends StoryblokResource {
   name: string;
+  parent_id: number | null;
 }
 
 describe("TopologicalSortStrategy", () => {
-  let strategy: TopologicalSortStrategy<TestResource>;
+  let strategy: TopologicalSortStrategy<"parent_id", TestResource>;
 
   beforeEach(() => {
-    strategy = new TopologicalSortStrategy<TestResource>();
+    strategy = new TopologicalSortStrategy<"parent_id", TestResource>(
+      "parent_id"
+    );
   });
 
   describe("High Priority Tests", () => {
@@ -107,6 +110,31 @@ describe("TopologicalSortStrategy", () => {
       expect(sorted[1]?.id).toBe(2); // Level 1 second
       expect(sorted[2]?.id).toBe(3); // Level 2 third
       expect(sorted[3]?.id).toBe(4); // Level 3 last
+    });
+
+    it("should work with custom parent field name", () => {
+      interface TestResourceWithFolderId
+        extends Omit<TestResource, "parent_id"> {
+        folder_id: number | null;
+      }
+
+      const customStrategy = new TopologicalSortStrategy<
+        "folder_id",
+        TestResourceWithFolderId
+      >("folder_id");
+
+      const resources: TestResourceWithFolderId[] = [
+        { id: 2, folder_id: 1, uuid: "child-uuid", name: "Child" },
+        { id: 1, folder_id: null, uuid: "parent-uuid", name: "Parent" },
+        { id: 3, folder_id: 2, uuid: "grandchild-uuid", name: "Grandchild" },
+      ];
+
+      const sorted = customStrategy.sort(resources);
+
+      // Parents should come before children
+      expect(sorted[0]?.id).toBe(1); // Parent first
+      expect(sorted[1]?.id).toBe(2); // Child second
+      expect(sorted[2]?.id).toBe(3); // Grandchild last
     });
   });
 });

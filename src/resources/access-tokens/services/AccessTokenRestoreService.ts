@@ -27,8 +27,11 @@ export class AccessTokenRestoreService extends BaseResourceRestoreService<Storyb
   }
 
   handleError(error: unknown): never {
-    throw new Error(
-      `Access token restoration failed: ${error instanceof Error ? error.message : String(error)}`
-    );
+    const message =
+      typeof error === "object" && error !== null && "message" in error
+        ? error.message
+        : String(error);
+
+    throw new Error(`Access token restoration failed: ${message}`);
   }
 }

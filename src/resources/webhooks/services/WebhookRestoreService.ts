@@ -1,6 +1,5 @@
-import type { RestoreOptions } from "@core/types/types";
 import { BaseResourceRestoreService } from "@core/services/BaseRestoreService";
-import type { StoryblokResource } from "@core/types/types";
+import type { RestoreOptions, StoryblokResource } from "@core/types/types";
 import type { ISbResponse } from "storyblok-js-client";
 
 interface WebhookResource extends StoryblokResource {
@@ -33,8 +32,11 @@ export class WebhookRestoreService extends BaseResourceRestoreService<WebhookRes
   }
 
   handleError(error: unknown): never {
-    throw new Error(
-      `Webhook restoration failed: ${error instanceof Error ? error.message : String(error)}`
-    );
+    const message =
+      typeof error === "object" && error !== null && "message" in error
+        ? error.message
+        : String(error);
+
+    throw new Error(`Webhook restoration failed: ${message}`);
   }
 }

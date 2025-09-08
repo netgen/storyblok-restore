@@ -18,11 +18,14 @@ importers:
         specifier: ^1.2.8
         version: 1.2.8
       storyblok-js-client:
-        specifier: ^5.0.0
-        version: 5.14.4
+        specifier: ^7.1.4
+        version: 7.1.4
       toposort:
         specifier: ^2.0.2
         version: 2.0.2
+      tsx:
+        specifier: ^4.20.5
+        version: 4.20.5
     devDependencies:
       '@types/minimist':
         specifier: ^1.2.5
@@ -51,9 +54,6 @@ importers:
       tsup:
         specifier: ^8.5.0
         version: 8.5.0(postcss@8.5.6)(tsx@4.20.5)(typescript@5.8.3)
-      tsx:
-        specifier: ^4.20.5
-        version: 4.20.5
       typescript:
         specifier: ^5.0.0
         version: 5.8.3
@@ -1213,8 +1213,8 @@ packages:
   std-env@3.9.0:
     resolution: {integrity: sha512-UGvjygr6F6tpH7o2qyqR6QYpwraIjKSdtzyBdyytFOHmPZY917kwdwLG0RbOjWOnKmnm3PeHjaoLLMie7kPLQw==}
 
-  storyblok-js-client@5.14.4:
-    resolution: {integrity: sha512-9yY33tvfO3Cbe25h/l6K0T3IxJeOOyGl/pCwsd55woT0ZEBhIiEZoMumpRsyLjD5AedW9KXLbLjMXhHazkepCA==}
+  storyblok-js-client@7.1.4:
+    resolution: {integrity: sha512-8U/l4HcWBhyurjOYh9xlhQ+TLN48DxBovzIXwXArbH0muJx/kqYlU/XHnwpmGZJuxTRgRdhWGjpZkthpXpYeaw==}
 
   string-width@4.2.3:
     resolution: {integrity: sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==}
@@ -2491,7 +2491,7 @@ snapshots:
 
   std-env@3.9.0: {}
 
-  storyblok-js-client@5.14.4: {}
+  storyblok-js-client@7.1.4: {}
 
   string-width@4.2.3:
     dependencies:

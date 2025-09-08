@@ -7,34 +7,40 @@ import type { StoryblokResource } from "@core/types/types";
  * Ensures that parent resources are restored before their children.
  */
 export class TopologicalSortStrategy<
-  TResource extends StoryblokResource = StoryblokResource,
-> implements SortingStrategy<TResource>
+  TResourceField extends string | number,
+  TStoryblokResource extends StoryblokResource &
+    Record<TResourceField, unknown> = StoryblokResource &
+    Record<TResourceField, unknown>,
+> implements SortingStrategy<TStoryblokResource>
 {
+  constructor(
+    private readonly parentField: TResourceField = "parent_id" as TResourceField
+  ) {}
+
   /**
    * Sorts resources using topological order based on parent-child relationships.
    * @param resources The array of nestable resources to sort.
    * @returns The sorted array of resources.
    */
-  sort(resources: TResource[]): TResource[] {
+  sort(resources: TStoryblokResource[]): TStoryblokResource[] {
     if (!resources || resources.length === 0) {
       return resources;
     }
 
     try {
-      const idToResourceMap = new Map<string | number, TResource>();
+      const idToResourceMap = new Map<string | number, TStoryblokResource>();
       resources.forEach((resource) =>
         idToResourceMap.set(resource.id, resource)
       );
 
-      const parentDependencies: [number | null, number][] = resources.map(
-        (resource) => {
-          if (resource.parent_id) {
-            return [resource.parent_id, resource.id];
+      const parentDependencies: [number | string | null, number | string][] =
+        resources.map((resource) => {
+          if (this.parentField in resource && resource[this.parentField]) {
+            return [resource[this.parentField] as number | string, resource.id];
           } else {
             return [null, resource.id];
           }
-        }
-      );
+        });
 
       const sortedIds = toposort(parentDependencies).filter(
         (id) => id !== null
