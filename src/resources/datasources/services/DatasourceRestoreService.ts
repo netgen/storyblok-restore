@@ -8,10 +8,6 @@ import type { ISbResponse } from "storyblok-js-client";
  * Implements URL and parameter construction for datasources.
  */
 export class DatasourceRestoreService extends BaseResourceRestoreService<StoryblokResource> {
-  canHandle(type: string) {
-    return type === "datasource";
-  }
-
   getCreateUrl(_resource: StoryblokResource, options: RestoreOptions): string {
     return `spaces/${options.spaceId}/datasources`;
   }

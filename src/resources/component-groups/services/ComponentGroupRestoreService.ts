@@ -8,10 +8,6 @@ import type { ISbResponse } from "storyblok-js-client";
  * Implements URL and parameter construction for component groups.
  */
 export class ComponentGroupRestoreService extends BaseResourceRestoreService<StoryblokResource> {
-  canHandle(type: string) {
-    return type === "component-group";
-  }
-
   getCreateUrl(_resource: StoryblokResource, options: RestoreOptions): string {
     return `spaces/${options.spaceId}/component_groups`;
   }

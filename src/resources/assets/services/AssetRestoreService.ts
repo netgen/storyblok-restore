@@ -38,10 +38,6 @@ export class AssetRestoreService
 {
   constructor(private context: Context) {}
 
-  canHandle(type: string) {
-    return type === "asset";
-  }
-
   async restore(
     resource: AssetResource,
     options: RestoreOptions,

@@ -8,10 +8,6 @@ import type { ISbResponse } from "storyblok-js-client";
  * Implements URL and parameter construction for asset folders.
  */
 export class AssetFolderRestoreService extends BaseResourceRestoreService<StoryblokResource> {
-  canHandle(type: string) {
-    return type === "asset-folder";
-  }
-
   getCreateUrl(_resource: StoryblokResource, options: RestoreOptions): string {
     return `spaces/${options.spaceId}/asset_folders`;
   }

@@ -15,11 +15,7 @@ export abstract class BaseResourceRestoreService<T extends StoryblokResource>
   implements ResourceRestoreService<T>
 {
   constructor(private context: Context) {}
-  /**
-   * Determines if this service can handle the given resource type.
-   * @param type The resource type (e.g., 'story').
-   */
-  abstract canHandle(type: string): boolean;
+
   /**
    * Returns the URL for creating a resource.
    * @param resource The resource to create.

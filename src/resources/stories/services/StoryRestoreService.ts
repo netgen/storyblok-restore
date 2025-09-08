@@ -7,10 +7,6 @@ import type { RestoreOptions, StoryblokResource } from "@core/types/types";
  * Implements URL and parameter construction for stories.
  */
 export class StoryRestoreService extends BaseResourceRestoreService<StoryblokResource> {
-  canHandle(type: string) {
-    return type === "story";
-  }
-
   getCreateUrl(_resource: StoryblokResource, options: RestoreOptions): string {
     return `spaces/${options.spaceId}/stories`;
   }

@@ -13,7 +13,6 @@ import type { ResourceMappingRegistry } from "./ResourceMappingRegistry";
 export interface ResourceRestoreService<
   T extends StoryblokResource = StoryblokResource,
 > {
-  canHandle(type: string): boolean;
   restore(
     resource: T,
     options: RestoreOptions,

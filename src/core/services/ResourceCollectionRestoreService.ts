@@ -184,13 +184,4 @@ export abstract class ResourceCollectionRestoreService<
       newUuid: importedResource.uuid,
     });
   }
-
-  /**
-   * Checks if the service can handle a given resource type.
-   * @param type The type of resource to check.
-   * @returns True if the service can handle the resource type, false otherwise.
-   */
-  canHandle(type: string): boolean {
-    return this.restoreService.canHandle(type);
-  }
 }

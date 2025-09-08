@@ -8,10 +8,6 @@ import type { ISbResponse } from "storyblok-js-client";
  * Implements URL and parameter construction for access tokens.
  */
 export class AccessTokenRestoreService extends BaseResourceRestoreService<StoryblokResource> {
-  canHandle(type: string) {
-    return type === "access-token";
-  }
-
   getCreateUrl(_resource: StoryblokResource, options: RestoreOptions): string {
     return `spaces/${options.spaceId}/api_keys`;
   }

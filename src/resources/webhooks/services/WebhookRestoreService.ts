@@ -11,10 +11,6 @@ interface WebhookResource extends StoryblokResource {
  * Implements URL and parameter construction for webhooks.
  */
 export class WebhookRestoreService extends BaseResourceRestoreService<WebhookResource> {
-  canHandle(type: string) {
-    return type === "webhook";
-  }
-
   getCreateUrl(_resource: WebhookResource, options: RestoreOptions): string {
     return `spaces/${options.spaceId}/webhook_endpoints`;
   }

@@ -19,10 +19,6 @@ class TestResourceRestoreService extends BaseResourceRestoreService<TestResource
     super(context);
   }
 
-  canHandle(type: string): boolean {
-    return type === "test-resource";
-  }
-
   getCreateUrl(_resource: TestResource, options: RestoreOptions): string {
     return `spaces/${options.spaceId}/test_resources`;
   }
