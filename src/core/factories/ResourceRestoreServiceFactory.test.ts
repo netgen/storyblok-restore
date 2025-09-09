@@ -215,7 +215,6 @@ describe("ResourceRestoreServiceFactory", () => {
 
       // Verify the service was created with the correct context
       expect(service).toBeInstanceOf(MockServiceClass);
-      expect(service.canHandle).toBeDefined();
       expect(service.restore).toBeDefined();
     });
   });

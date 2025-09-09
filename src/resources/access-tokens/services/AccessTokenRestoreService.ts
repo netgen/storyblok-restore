@@ -12,6 +12,18 @@ export class AccessTokenRestoreService extends BaseResourceRestoreService<Storyb
     return `spaces/${options.spaceId}/api_keys`;
   }
 
+  getUpdateUrl(resource: StoryblokResource, options: RestoreOptions): string {
+    return `spaces/${options.spaceId}/api_keys/${resource.id}`;
+  }
+
+  getResourceIdentifier(resource: StoryblokResource): string {
+    return resource.id.toString();
+  }
+
+  getResourceType(): string {
+    return "access token";
+  }
+
   getParams(resource: StoryblokResource) {
     return {
       api_key: resource,

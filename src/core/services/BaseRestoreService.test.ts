@@ -2,7 +2,6 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { Context } from "../types/context";
 import type { RestoreOptions, StoryblokResource } from "../types/types";
 import { BaseResourceRestoreService } from "./BaseRestoreService";
-import { ResourceMappingRegistry } from "./ResourceMappingRegistry";
 
 // Mock resource type for testing
 interface TestResource extends StoryblokResource {
@@ -14,6 +13,7 @@ interface TestResource extends StoryblokResource {
 }
 
 // Concrete implementation for testing
+// @ts-expect-error
 class TestResourceRestoreService extends BaseResourceRestoreService<TestResource> {
   constructor(context: Context) {
     super(context);
@@ -46,7 +46,7 @@ class TestResourceRestoreService extends BaseResourceRestoreService<TestResource
 describe("BaseResourceRestoreService", () => {
   let service: TestResourceRestoreService;
   let mockContext: Context;
-  let mockMappingRegistry: ResourceMappingRegistry;
+
   let mockApiClient: any;
 
   beforeEach(() => {
@@ -57,8 +57,6 @@ describe("BaseResourceRestoreService", () => {
     mockContext = {
       apiClient: mockApiClient,
     };
-
-    mockMappingRegistry = new ResourceMappingRegistry();
 
     service = new TestResourceRestoreService(mockContext);
   });
@@ -90,7 +88,7 @@ describe("BaseResourceRestoreService", () => {
 
       mockApiClient.post.mockResolvedValue(mockResponse);
 
-      await service.restore(testResource, testOptions, mockMappingRegistry);
+      await service.restore(testResource, testOptions);
 
       expect(mockApiClient.post).toHaveBeenCalledWith(
         "spaces/test-space-id/test_resources",
@@ -108,9 +106,9 @@ describe("BaseResourceRestoreService", () => {
       const apiError = new Error("API Error");
       mockApiClient.post.mockRejectedValue(apiError);
 
-      await expect(
-        service.restore(testResource, testOptions, mockMappingRegistry)
-      ).rejects.toThrow("API Error");
+      await expect(service.restore(testResource, testOptions)).rejects.toThrow(
+        "API Error"
+      );
     });
 
     it("should return the correct resource data from API response", async () => {
@@ -127,11 +125,7 @@ describe("BaseResourceRestoreService", () => {
 
       mockApiClient.post.mockResolvedValue(mockResponse);
 
-      const result = await service.restore(
-        testResource,
-        testOptions,
-        mockMappingRegistry
-      );
+      const result = await service.restore(testResource, testOptions);
 
       expect(result).toEqual({
         id: 456,

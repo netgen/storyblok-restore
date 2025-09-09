@@ -12,6 +12,14 @@ export class AssetFolderRestoreService extends BaseResourceRestoreService<Storyb
     return `spaces/${options.spaceId}/asset_folders`;
   }
 
+  getUpdateUrl(resource: StoryblokResource, options: RestoreOptions): string {
+    return `spaces/${options.spaceId}/asset_folders/${resource.id}`;
+  }
+
+  getResourceType(): string {
+    return "asset folder";
+  }
+
   getParams(resource: StoryblokResource) {
     return {
       asset_folder: resource,

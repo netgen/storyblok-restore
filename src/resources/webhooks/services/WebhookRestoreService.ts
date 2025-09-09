@@ -4,6 +4,7 @@ import type { ISbResponse } from "storyblok-js-client";
 
 interface WebhookResource extends StoryblokResource {
   secret?: string;
+  name: string;
 }
 
 /**
@@ -15,6 +16,27 @@ export class WebhookRestoreService extends BaseResourceRestoreService<WebhookRes
     return `spaces/${options.spaceId}/webhook_endpoints`;
   }
 
+  getUpdateUrl(resource: WebhookResource, options: RestoreOptions): string {
+    return `spaces/${options.spaceId}/webhook_endpoints/${resource.id}`;
+  }
+
+  getResourceType(): string {
+    return "webhook";
+  }
+
+  protected async findExistingResource(
+    resource: WebhookResource,
+    options: RestoreOptions
+  ): Promise<WebhookResource | null> {
+    const response = await this.context.apiClient.get(
+      `spaces/${options.spaceId}/webhook_endpoints`,
+      {
+        search: resource.name,
+      }
+    );
+    return response.data?.webhook_endpoints?.[0] || null;
+  }
+
   getParams(resource: WebhookResource) {
     const { secret, ...webhookWithoutSecret } = resource;
 
@@ -23,7 +45,7 @@ export class WebhookRestoreService extends BaseResourceRestoreService<WebhookRes
     };
   }
 
-  getResponseData(response: ISbResponse): StoryblokResource {
+  getResponseData(response: ISbResponse): WebhookResource {
     return response.data.webhook_endpoint;
   }
 

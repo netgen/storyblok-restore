@@ -12,6 +12,18 @@ export class CollaboratorRestoreService extends BaseResourceRestoreService<Story
     return `spaces/${options.spaceId}/collaborators`;
   }
 
+  getUpdateUrl(resource: StoryblokResource, options: RestoreOptions): string {
+    return `spaces/${options.spaceId}/collaborators/${resource.id}`;
+  }
+
+  getResourceIdentifier(resource: StoryblokResource): string {
+    return resource.id.toString();
+  }
+
+  getResourceType(): string {
+    return "collaborator";
+  }
+
   getParams(resource: StoryblokResource) {
     return {
       collaborator: resource,

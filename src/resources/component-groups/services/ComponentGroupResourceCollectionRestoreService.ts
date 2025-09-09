@@ -17,7 +17,7 @@ export default class ComponentGroupResourceCollectionRestoreService extends Reso
       [
         new FieldReplacerPreprocessor({
           resourceField: "parent_id",
-          contextStore: "components",
+          contextStore: "component-groups",
           contextStoreItem: "oldIdToNewIdMap",
         }),
       ]
