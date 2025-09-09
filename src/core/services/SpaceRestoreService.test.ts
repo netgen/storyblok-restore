@@ -42,7 +42,9 @@ describe("SpaceRestoreService", () => {
     mockRestoreService = createMockRestoreService();
     mockFactory = createMockFactory();
     mockContext = {
-      apiClient: {} as any,
+      apiClient: {
+        put: vi.fn(),
+      } as any,
     };
     testOptions = {
       spaceId: "test-space-id",
@@ -88,9 +90,9 @@ describe("SpaceRestoreService", () => {
 
       await service.restore(testOptions);
 
-      // Verify all resource types were processed
+      // Verify all resource types were processed (1 for space settings + 10 for resource types)
       expect(vi.mocked(fs.default.existsSync)).toHaveBeenCalledTimes(
-        Object.values(ResourceType).length
+        Object.values(ResourceType).length + 1
       );
 
       // Verify factory was called for each resource type
@@ -116,9 +118,9 @@ describe("SpaceRestoreService", () => {
 
       await service.restore(testOptions);
 
-      // Verify fs.existsSync was called for each resource type
+      // Verify fs.existsSync was called for each resource type (1 for space settings + 10 for resource types)
       expect(vi.mocked(fs.default.existsSync)).toHaveBeenCalledTimes(
-        Object.values(ResourceType).length
+        Object.values(ResourceType).length + 1
       );
 
       // Verify factory was never called (no folders exist)
@@ -137,10 +139,11 @@ describe("SpaceRestoreService", () => {
       const fs = await import("fs");
       const path = await import("path");
 
-      // Mock fs.existsSync to return true for first folder only
+      // Mock fs.existsSync to return true for space settings and first folder only
       vi.mocked(fs.default.existsSync)
-        .mockReturnValueOnce(true)
-        .mockReturnValue(false);
+        .mockReturnValueOnce(true) // space settings file exists
+        .mockReturnValueOnce(true) // first resource folder exists
+        .mockReturnValue(false); // other folders don't exist
 
       // Mock fs.readdirSync to return JSON files
       vi.mocked(fs.default.readdirSync).mockReturnValue([
@@ -165,8 +168,8 @@ describe("SpaceRestoreService", () => {
 
       await service.restore(testOptions);
 
-      // Verify files were read
-      expect(vi.mocked(fs.default.readFileSync)).toHaveBeenCalledTimes(2);
+      // Verify files were read (1 for space settings + 2 for resource files)
+      expect(vi.mocked(fs.default.readFileSync)).toHaveBeenCalledTimes(3);
 
       // Verify JSON was parsed and passed to restore service
       expect(vi.mocked(mockRestoreService.restore)).toHaveBeenCalledWith(
@@ -191,10 +194,11 @@ describe("SpaceRestoreService", () => {
       const fs = await import("fs");
       const path = await import("path");
 
-      // Mock fs.existsSync to return true for first folder only
+      // Mock fs.existsSync to return true for space settings and first folder only
       vi.mocked(fs.default.existsSync)
-        .mockReturnValueOnce(true)
-        .mockReturnValue(false);
+        .mockReturnValueOnce(true) // space settings file exists
+        .mockReturnValueOnce(true) // first resource folder exists
+        .mockReturnValue(false); // other folders don't exist
 
       // Mock fs.readdirSync to return empty array (no files)
       vi.mocked(fs.default.readdirSync).mockReturnValue([] as any);
@@ -223,10 +227,11 @@ describe("SpaceRestoreService", () => {
       const fs = await import("fs");
       const path = await import("path");
 
-      // Mock fs.existsSync to return true for first folder only
+      // Mock fs.existsSync to return true for space settings and first folder only
       vi.mocked(fs.default.existsSync)
-        .mockReturnValueOnce(true)
-        .mockReturnValue(false);
+        .mockReturnValueOnce(true) // space settings file exists
+        .mockReturnValueOnce(true) // first resource folder exists
+        .mockReturnValue(false); // other folders don't exist
 
       // Mock fs.readdirSync to return empty array
       vi.mocked(fs.default.readdirSync).mockReturnValue([] as any);
@@ -279,8 +284,8 @@ describe("SpaceRestoreService", () => {
 
       await filteredService.restore(testOptions);
 
-      // Verify only specified resource types were processed
-      expect(vi.mocked(fs.default.existsSync)).toHaveBeenCalledTimes(2); // Only STORIES and ASSETS
+      // Verify only specified resource types were processed (1 for space settings + 2 for resource types)
+      expect(vi.mocked(fs.default.existsSync)).toHaveBeenCalledTimes(3); // Only STORIES and ASSETS
       expect(vi.mocked(mockFactory.getServiceForType)).toHaveBeenCalledTimes(2);
     });
 
@@ -306,9 +311,9 @@ describe("SpaceRestoreService", () => {
 
       await service.restore(testOptions);
 
-      // Verify all resource types were processed
+      // Verify all resource types were processed (1 for space settings + 10 for resource types)
       expect(vi.mocked(fs.default.existsSync)).toHaveBeenCalledTimes(
-        Object.values(ResourceType).length
+        Object.values(ResourceType).length + 1
       );
       expect(vi.mocked(mockFactory.getServiceForType)).toHaveBeenCalledTimes(
         Object.values(ResourceType).length
@@ -319,10 +324,11 @@ describe("SpaceRestoreService", () => {
       const fs = await import("fs");
       const path = await import("path");
 
-      // Mock fs.existsSync to return true for first folder only
+      // Mock fs.existsSync to return true for space settings and first folder only
       vi.mocked(fs.default.existsSync)
-        .mockReturnValueOnce(true)
-        .mockReturnValue(false);
+        .mockReturnValueOnce(true) // space settings file exists
+        .mockReturnValueOnce(true) // first resource folder exists
+        .mockReturnValue(false); // other folders don't exist
 
       // Mock fs.readdirSync to return empty array (no JSON files)
       vi.mocked(fs.default.readdirSync).mockReturnValue([] as any);
