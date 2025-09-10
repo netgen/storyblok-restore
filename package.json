@@ -1,10 +1,10 @@
 {
-  "name": "storyblok-backup-and-restore",
+  "name": "storyblok-restore",
   "version": "0.1.0",
   "type": "module",
   "description": "CLI and library for backuping and restoring Storyblok resources, supporting both single and bulk operations.",
   "bin": {
-    "storyblok-backup-and-restore": "cli.js"
+    "storyblok-restore": "cli.js"
   },
   "files": [
     "dist/",

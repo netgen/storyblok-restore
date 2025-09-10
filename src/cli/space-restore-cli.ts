@@ -21,7 +21,7 @@ export async function runSpaceRestoreCli(args: Record<string, string>) {
 
   const oauthToken = args.token || process.env.STORYBLOK_OAUTH_TOKEN;
   const spaceId = args["spaceId"] || process.env.STORYBLOK_SPACE_ID;
-  const region = args.region || "eu";
+  const region = args.region || process.env.STORYBLOK_REGION || "eu";
   const resourceTypes = args["resourceTypes"]?.split(",");
   const backupPath = args["backupPath"];
 

@@ -178,6 +178,26 @@ The `ResourceMappingRegistry` manages cross-resource dependencies and ID mapping
 #### Strategy Pattern
 Sorting strategies allow different resource ordering approaches (topological, alphabetical, etc.).
 
+#### Upsert Pattern
+Resources are restored using an upsert approach (create-first, update-on-conflict) to handle existing resources gracefully.
+
+### Resource Restoration Logic
+
+#### Upsert Implementation
+The restoration process follows a robust upsert pattern to handle resource conflicts:
+
+1. **Create First**: Attempt to create the resource via POST request (fast path for 99.9% of cases)
+2. **Conflict Detection**: If a conflict error is detected, automatically switch to update mode
+3. **Find Existing**: Call `findExistingResource()` to locate the existing resource
+4. **Update**: If found, update the existing resource via PUT with new resource data
+5. **Error Handling**: Proper error propagation if update fails or resource not found
+
+#### Conflict Detection
+The system detects various conflict error patterns from API responses:
+- "already taken", "been taken", "already exists"
+- "duplicate", "conflict", "name taken", "slug taken"
+- Handles both string and array error message formats
+
 ---
 
 For questions about the project structure, please open an issue or reach out to the maintainers.
