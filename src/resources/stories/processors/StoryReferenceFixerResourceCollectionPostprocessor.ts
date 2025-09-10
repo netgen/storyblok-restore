@@ -82,6 +82,7 @@ export class StoryReferenceFixerResourceCollectionPostprocessor
               `spaces/${options.spaceId}/stories/${story.id}`,
               {
                 story: updatedContent,
+                publish: 1,
               }
             );
 

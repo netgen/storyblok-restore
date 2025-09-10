@@ -1,18 +1,22 @@
 #!/usr/bin/env node
 import { ResourceType } from "@core/types/types";
 import { spaceRestore } from "../entries/space-restore";
-import { setLogLevel, LogLevel, logger } from "@shared/logging";
+import { setConsoleLogLevel, LogLevel, logger } from "@shared/logging";
 import { prepareBackup } from "../../scripts/prepare-backup";
+import * as readline from "readline";
 
 export async function runSpaceRestoreCli(args: Record<string, string>) {
   logger.info("\n🚀 Starting Storyblok Space Restore CLI");
   logger.debug("CLI arguments:", args);
 
   if (args.verbose) {
-    setLogLevel(LogLevel.DEBUG);
+    setConsoleLogLevel([
+      LogLevel.DEBUG,
+      LogLevel.ERROR,
+      LogLevel.WARN,
+      LogLevel.INFO,
+    ]);
     logger.debug("Verbose logging enabled");
-  } else {
-    setLogLevel(LogLevel.INFO);
   }
 
   const oauthToken = args.token || process.env.STORYBLOK_OAUTH_TOKEN;
@@ -64,6 +68,39 @@ export async function runSpaceRestoreCli(args: Record<string, string>) {
   try {
     // Prepare backup folder before restoration
     await prepareBackup({ backupPath: backupPath! });
+
+    logger.warn("\n⚠️  IMPORTANT RESTORATION WARNINGS:");
+    logger.warn(
+      "   • Stories with missing required files or broken references will be SKIPPED"
+    );
+    logger.warn("   Before proceeding, please ensure:");
+    logger.warn(
+      "   • The target space has the SAME PLAN and FEATURES as the source space. Plan limitations may prevent certain content from being restored:"
+    );
+    logger.warn("     - PDF uploads require appropriate plan features");
+    logger.warn("     - Collaborator limits based on plan restrictions");
+    logger.warn("     - Asset storage limits may affect file uploads");
+    logger.warn("     - etc");
+
+    // Prompt user for confirmation
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+    });
+
+    const answer = await new Promise<string>((resolve) => {
+      rl.question(
+        "\n❓ Do you want to proceed with the restoration? (y/N): ",
+        resolve
+      );
+    });
+
+    rl.close();
+
+    if (answer.toLowerCase() !== "y" && answer.toLowerCase() !== "yes") {
+      logger.info("❌ Restoration cancelled by user.");
+      process.exit(0);
+    }
 
     logger.info("\n🔄 Starting space restoration process...");
     await spaceRestore({

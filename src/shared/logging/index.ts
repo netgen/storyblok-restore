@@ -1,13 +1,12 @@
-import { ConsoleLogger, LogLevel, type Logger } from "./Logger";
+import { LoggerSingleton } from "./LoggerSingleton";
+import { LogLevel, type Logger } from "./Logger";
+export { LogLevel, type Logger };
+export { MockLogger } from "./MockLogger";
 
-export let logger: Logger = new ConsoleLogger();
+// Export the singleton instance as the default logger
+export const logger: Logger = LoggerSingleton.getInstance();
 
-export const setLogger = (newLogger: Logger): void => {
-  logger = newLogger;
+// Convenience functions for changing log levels
+export const setConsoleLogLevel = (levels: LogLevel[]): void => {
+  LoggerSingleton.getInstance().setConsoleLogLevel(levels);
 };
-
-export const setLogLevel = (level: LogLevel): void => {
-  logger = new ConsoleLogger(level);
-};
-
-export { LogLevel, type Logger } from "./Logger";

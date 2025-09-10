@@ -74,7 +74,7 @@ export class AssetRestoreService
         `Failed to request upload signature for asset ${resource.id}`
       );
       throw new Error(
-        `Failed to request upload signature for asset ${resource.id}: ${error instanceof Error ? error.message : String(error)}`
+        `Failed to request upload signature for asset ${resource.id}: ${this.getErrorMessage(error)}`
       );
     }
 
@@ -113,7 +113,7 @@ export class AssetRestoreService
     } catch (error) {
       logger.error(`Failed to upload asset file ${resource.filename}`);
       throw new Error(
-        `Failed to upload asset file ${resource.filename}: ${error instanceof Error ? error.message : String(error)}`
+        `Failed to upload asset file ${resource.filename}: ${this.getErrorMessage(error)}`
       );
     }
 
@@ -131,7 +131,7 @@ export class AssetRestoreService
     } catch (error) {
       logger.error(`Failed to finish asset upload for ${resource.id}`);
       throw new Error(
-        `Failed to finish asset upload for ${resource.id}: ${error instanceof Error ? error.message : String(error)}`
+        `Failed to finish asset upload for ${resource.id}: ${this.getErrorMessage(error)}`
       );
     }
 
@@ -186,4 +186,16 @@ export class AssetRestoreService
       throw error;
     }
   };
+
+  private getErrorMessage(error: unknown): string {
+    const message =
+      typeof error === "object" &&
+      error !== null &&
+      "message" in error &&
+      typeof error.message === "string"
+        ? error.message
+        : JSON.stringify(error);
+
+    return message;
+  }
 }
