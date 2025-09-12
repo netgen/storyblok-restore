@@ -1,16 +1,17 @@
 {
   "name": "storyblok-restore",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "type": "module",
-  "description": "CLI and library for backuping and restoring Storyblok resources, supporting both single and bulk operations.",
+  "description": "npx CLI tool for restoring full Storyblok spaces from backup files",
   "bin": {
     "storyblok-restore": "cli.js"
   },
   "files": [
     "dist/",
-    "src/",
     "cli.js",
-    "README.md"
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
   ],
   "scripts": {
     "build": "tsc && tsc-alias",
@@ -27,7 +28,12 @@
     "cms",
     "backup"
   ],
-  "author": "Your Name",
+  "author": "Netgen <info@netgen.hr>",
+  "homepage": "https://github.com/netgen/storyblok-restore",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/netgen/storyblok-restore.git"
+  },
   "license": "MIT",
   "dependencies": {
     "commander": "^14.0.0",

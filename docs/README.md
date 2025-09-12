@@ -1,7 +1,7 @@
 # Storyblok Backup and Restore
 
 [![npm version](https://img.shields.io/npm/v/storyblok-restore.svg)](https://www.npmjs.com/package/storyblok-restore)
-[![license](https://img.shields.io/github/license/yourusername/storyblok-restore)](https://github.com/yourusername/storyblok-restore/blob/main/LICENSE)
+[![license](https://img.shields.io/github/license/netgen/storyblok-restore)](https://github.com/netgen/storyblok-restore/blob/main/LICENSE)
 
 A powerful CLI tool to restore entire [Storyblok CMS](https://www.storyblok.com) spaces from backup files created by [storyblok-backup](https://github.com/webflorist/storyblok-backup).
 
