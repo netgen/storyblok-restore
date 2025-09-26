@@ -2,7 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [1.0.1] - 2025-09-12
+## [1.0.2] - 2025-09-26
+
+- remove incorrect naming from readme and other docs
+
+## [1.0.1] - 2025-09-26
 
 - moved README.md file to root of the project so it appears on npm registry
 
