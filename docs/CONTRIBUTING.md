@@ -1,4 +1,4 @@
-# Contributing to Storyblok Backup and Restore
+# Contributing to Storyblok Restore
 
 # Core concepts & vocabulary
 

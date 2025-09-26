@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file.
 ## [1.0.0] - 2025-09-12
 
 ### Added
-- Initial release of Storyblok Backup and Restore CLI
+- Initial release of Storyblok Restore CLI
 - Complete* space restoration from backup files
 - Support for most Storyblok resource types (stories, components, assets, etc.)
 - Smart dependency resolution and conflict handling

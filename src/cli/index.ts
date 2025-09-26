@@ -4,9 +4,7 @@ import { runSpaceRestoreCli } from "./space-restore-cli";
 
 const program = new Command();
 
-program
-  .name("storyblok-restore")
-  .description("Backup and restore Storyblok CMS content");
+program.name("storyblok-restore").description("Restore Storyblok CMS content");
 
 program
   .command("space-restore")
