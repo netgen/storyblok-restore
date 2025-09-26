@@ -1,4 +1,4 @@
-# Storyblok Backup and Restore
+# Storyblok Restore
 
 [![npm version](https://img.shields.io/npm/v/storyblok-restore.svg)](https://www.npmjs.com/package/storyblok-restore)
 [![license](https://img.shields.io/github/license/netgen/storyblok-restore)](https://github.com/netgen/storyblok-restore/blob/main/LICENSE)
