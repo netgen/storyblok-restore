@@ -89,9 +89,14 @@ export class SpaceRestoreService {
       await this.context.apiClient.put(`spaces/${options.spaceId}`, {
         space: spaceWithChangedName,
       } as ISbStoriesParams);
-    } catch (error) {
-      logger.error(`Failed to restore space settings: ${error}`);
-      throw new Error(`Failed to restore space settings: ${error}`);
+    } catch (error: any) {
+      const message =
+        typeof error === "object" && error !== null && "message" in error
+          ? error.message
+          : String(error);
+      
+      logger.error(`Failed to restore space settings: ${message}`);
+      throw new Error(`Failed to restore space settings: ${message}`);
     }
   }
 }
