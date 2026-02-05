@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.3] - 2026-02-05
+
+### Fixed
+- Fixed CLI build to properly work when run from dist folder (npx installation)
+- Fixed CLI argument from `--space-id` to `--space` to match documentation
+- Added support for `--region` CLI argument (previously only supported via env var)
+- Fixed ResourceCollectionRestoreServiceFactory to properly detect dev vs production environment
+- Improved error handling in SpaceRestoreService with better error messages
+
 ## [1.0.2] - 2025-09-26
 
 - remove incorrect naming from readme and other docs
