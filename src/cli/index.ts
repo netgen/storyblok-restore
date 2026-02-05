@@ -11,7 +11,8 @@ program
   .description("Restore an entire space from a backup folder")
   .option("--backup-path <path>", "Path to backup root folder")
   .option("--token <token>", "Storyblok OAuth token")
-  .option("--space-id <space_id>", "Storyblok space ID")
+  .option("--space <space_id>", "Storyblok space ID")
+  .option("--region <region>", "Storyblok region (default: eu)")
   .option(
     "--resource-types <types>",
     "Resource types to restore (comma separated, optional)"
