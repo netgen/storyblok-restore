@@ -1,6 +1,6 @@
 import { glob } from "glob";
-import path from "path";
-import fs from "fs";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
 import type { Context } from "../types/context";
 import type { ResourceCollectionRestoreService } from "../services/ResourceCollectionRestoreService";
 import type { ResourceType } from "../types/types";
@@ -15,11 +15,14 @@ export class ResourceCollectionRestoreServiceFactory {
   constructor(private services: ResourceCollectionRestoreServiceCreator[]) {}
 
   static async create() {
-    // Detect environment: use src/ for development, dist/src/ for production
-    const isDev = fs.existsSync("src/resources");
-    const pattern = isDev
-      ? "src/resources/**/*ResourceCollectionRestoreService.ts"
-      : "dist/src/resources/**/*ResourceCollectionRestoreService.js";
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = dirname(__filename);
+    const resourcesDir = join(__dirname, "../../resources");
+    const ext = __filename.endsWith(".ts") ? ".ts" : ".js";
+    const pattern = join(
+      resourcesDir,
+      `**/*ResourceCollectionRestoreService${ext}`
+    );
 
     const serviceFiles = await glob(pattern);
 
@@ -27,7 +30,7 @@ export class ResourceCollectionRestoreServiceFactory {
 
     const creators = await Promise.all(
       serviceFiles.map(async (file) => {
-        const module = await import(path.resolve(file));
+        const module = await import(file);
         const ServiceClass = module.default;
 
         const resourceType = ServiceClass.RESOURCE_TYPE;

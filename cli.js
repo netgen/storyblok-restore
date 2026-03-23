@@ -15,6 +15,7 @@ if (existsSync(srcPath)) {
   spawn("npx", ["tsx", srcPath, ...process.argv.slice(2)], {
     stdio: "inherit",
     shell: true,
+    cwd: __dirname,
   });
 } else {
   // Production: import compiled JavaScript
