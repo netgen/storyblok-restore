@@ -1,6 +1,6 @@
 {
 	"name": "storyblok-restore",
-	"version": "1.0.3",
+	"version": "1.0.4",
 	"type": "module",
 	"description": "npx CLI tool for restoring full Storyblok spaces from backup files",
 	"bin": {

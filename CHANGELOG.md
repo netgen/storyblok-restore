@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.4] - 2026-03-23
+
+### Fixed
+- Resolve service discovery and dynamic imports relative to the package install location so the CLI works when run from any working directory (not only the project root) ([#4](https://github.com/imujo/storyblok-backup-and-restore/pull/4), thanks Eric Grossnickle)
+
 ## [1.0.3] - 2026-02-05
 
 ### Fixed
